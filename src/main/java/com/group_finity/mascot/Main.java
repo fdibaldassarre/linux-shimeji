@@ -17,18 +17,11 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import com.group_finity.mascot.config.Configuration;
 import com.group_finity.mascot.config.ConfigurationFactory;
-import com.group_finity.mascot.config.Entry;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
-import com.group_finity.mascot.exception.ConfigurationException;
 
 /**
  * プログラムのエントリポイント.
@@ -93,7 +86,7 @@ public class Main {
 		try {			
 			configuration = configurationFactory.load();
 		} catch (Exception e) {
-			log.log(Level.SEVERE, "設定ファイルの記述に誤りがあります", e);
+			log.log(Level.SEVERE, "Error in configuration file", e);
 			exit();
 		}
 	}
@@ -193,7 +186,7 @@ public class Main {
 	 */
 	public void createMascot() {
 
-		log.log(Level.INFO, "マスコットを作成");
+		log.log(Level.INFO, "Creating mascot");
 
 		// マスコットを1個作成
 		final Mascot mascot = new Mascot();
@@ -204,15 +197,15 @@ public class Main {
 		mascot.setLookRight(Math.random() < 0.5);
 
 		try {
-			mascot.setBehavior(getConfiguration().buildBehavior(null, mascot));
+			mascot.setBehavior(getConfiguration().buildBehavior((String) null, mascot));
 
 			this.getManager().add(mascot);
 
 		} catch (final BehaviorInstantiationException e) {
-			log.log(Level.SEVERE, "最初の行動の初期化に失敗しました", e);
+			log.log(Level.SEVERE, "Cannot set first action", e);
 			mascot.dispose();
 		} catch (final CantBeAliveException e) {
-			log.log(Level.SEVERE, "生き続けることが出来ない状況", e);
+			log.log(Level.SEVERE, "Cannot stay alive", e);
 			mascot.dispose();
 		}
 

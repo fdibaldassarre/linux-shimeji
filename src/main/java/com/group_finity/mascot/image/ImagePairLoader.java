@@ -35,7 +35,7 @@ public class ImagePairLoader {
 		if(imgPath == null) {
 			inputImg = ImagePairLoader.class.getResource("/shime/img/" + name);
 		} else {
-			inputImg = imgPath.resolve(name).toUri().toURL();
+			inputImg = imgPath.resolve(name.substring(1, name.length())).toUri().toURL();
 		}
 		
 		BufferedImage leftImage = ImageIO.read(inputImg);

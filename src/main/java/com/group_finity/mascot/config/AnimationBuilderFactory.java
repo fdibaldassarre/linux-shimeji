@@ -9,7 +9,7 @@ public class AnimationBuilderFactory {
 	private final ImagePairLoader imagePairLoader;
 	
 	public AnimationBuilderFactory(Configuration configuration) {
-		imagePairLoader = new ImagePairLoader(configuration.shimejiImgFolder);
+		imagePairLoader = new ImagePairLoader(configuration.getShimejiImgFolder());
 	}
 
 	

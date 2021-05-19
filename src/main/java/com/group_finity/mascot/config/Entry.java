@@ -12,18 +12,22 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+// TODO: remove methods with String input signature (e.g. getAttributes(String tagName))
 public class Entry {
 
-	private Element element;
+	private final Element element;
 	
 	private Map<String, String> attributes;
 	
 	private List<Entry> children;
 	
 	private Map<String, List<Entry> > selected = new HashMap<String, List<Entry>>();
+
+	private final XmlLanguages language;
 	
-	public Entry(final Element element){
+	public Entry(Element element, XmlLanguages language){
 		this.element = element;
+		this.language = language;
 	}
 	
 	public String getName() {
@@ -45,6 +49,12 @@ public class Entry {
 		return this.attributes;
 	}
 	
+	public String getAttribute(XmlIdentifiers attributeIdentifier){
+		String attributeName = attributeIdentifier.getName(language);
+		return getAttribute(attributeName);
+	}
+	
+	@Deprecated
 	public String getAttribute(final String attributeName){
 		final Attr attribute = this.element.getAttributeNode(attributeName);
 		if ( attribute==null ) {
@@ -53,6 +63,12 @@ public class Entry {
 		return attribute.getValue();
 	}
 	
+	public List<Entry> selectChildren(XmlIdentifiers tagIdentifier) {
+		String tagName = tagIdentifier.getName(language);
+		return selectChildren(tagName);
+	}
+	
+	@Deprecated
 	public List<Entry> selectChildren(final String tagName) {
 		
 		List<Entry> children = this.selected.get(tagName);
@@ -82,7 +98,7 @@ public class Entry {
 		for( int i = 0; i<childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
 			if ( childNode instanceof Element ) {
-				this.children.add(new Entry((Element)childNode));
+				this.children.add(new Entry((Element)childNode, language));
 			}
 		}
 		

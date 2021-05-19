@@ -27,7 +27,7 @@ public class ActionBuilder implements IActionBuilder {
 
 	private static final Logger log = Logger.getLogger(ActionBuilder.class.getName());
 
-	private final String type;
+	private final XmlActionType type;
 
 	private final String name;
 
@@ -41,34 +41,38 @@ public class ActionBuilder implements IActionBuilder {
 
 	private final AnimationBuilderFactory animationBuilderFactory;
 
-	public ActionBuilder(final Configuration configuration, final Entry actionNode) throws IOException {
+	public ActionBuilder(XmlLanguages language, Configuration configuration, final Entry actionNode) throws IOException {
 		animationBuilderFactory = new AnimationBuilderFactory(configuration);
 		
-		this.name = actionNode.getAttribute("名前");
-		this.type = actionNode.getAttribute("種類");
-		this.className = actionNode.getAttribute("クラス");
+		this.name = actionNode.getAttribute(XmlIdentifiers.Name);
+		this.type = XmlActionType.parseString(actionNode.getAttribute(XmlIdentifiers.Type), language);
+		this.className = actionNode.getAttribute(XmlIdentifiers.ClassName);
 
-		log.log(Level.INFO, "動作読み込み開始({0})", this);
+		log.log(Level.INFO, "Start reading({0})", this);
 
 		this.getParams().putAll(actionNode.getAttributes());
-		for (final Entry node : actionNode.selectChildren("アニメーション")) {
+		for (final Entry node : actionNode.selectChildren(XmlIdentifiers.Animation)) {
 			this.getAnimationBuilders().add(animationBuilderFactory.create(node));
 		}
 
 		for (final Entry node : actionNode.getChildren()) {
-			if (node.getName().equals("動作参照")) {
+			if (node.getName().equals(XmlIdentifiers.ActionReference.getName(language))) {
 				this.getActionRefs().add(new ActionRef(configuration, node));
-			} else if (node.getName().equals("動作")) {
-				this.getActionRefs().add(new ActionBuilder(configuration, node));
+			} else if (node.getName().equals(XmlIdentifiers.Action.getName(language))) {
+				this.getActionRefs().add(new ActionBuilder(language, configuration, node));
 			}
 		}
 
-		log.log(Level.INFO, "動作読み込み完了");
+		log.log(Level.INFO, "Read complete");
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	@Override
 	public String toString() {
-		return "動作(" + getName() + "," + getType() + "," + getClassName() + ")";
+		return "ActionBuilder(" + name + "," + type + "," + className + ")";
 	}
 
 	@SuppressWarnings("unchecked")
@@ -84,9 +88,9 @@ public class ActionBuilder implements IActionBuilder {
 			// 子アクションを生成
 			final List<Action> actions = createActions();
 
-			if (this.type.equals("組み込み")) {
+			if (this.type == XmlActionType.Embedded) {
 				try {
-					final Class<? extends Action> cls = (Class<? extends Action>) Class.forName(this.getClassName());
+					final Class<? extends Action> cls = (Class<? extends Action>) Class.forName(className);
 					try {
 
 						try {
@@ -109,24 +113,24 @@ public class ActionBuilder implements IActionBuilder {
 					throw new ActionInstantiationException("動作クラスが見つかりません(" + this + ")", e);
 				}
 
-			} else if (this.type.equals("移動")) {
+			} else if (this.type == XmlActionType.Move) {
 				return new Move(animations, variables);
-			} else if (this.type.equals("静止")) {
+			} else if (this.type== XmlActionType.Stay) {
 				return new Stay(animations, variables);
-			} else if (this.type.equals("固定")) {
+			} else if (this.type == XmlActionType.Animate) {
 				return new Animate(animations, variables);
-			} else if (this.type.equals("複合")) {
+			} else if (this.type == XmlActionType.Sequence) {
 				return new Sequence(variables, actions.toArray(new Action[0]));
-			} else if (this.type.equals("選択")) {
+			} else if (this.type == XmlActionType.Select) {
 				return new Select(variables, actions.toArray(new Action[0]));
 			} else {
-				throw new ActionInstantiationException("動作の種類が不明(" + this + ")");
+				throw new ActionInstantiationException("Unknown type(" + this + ")");
 			}
 
 		} catch (final AnimationInstantiationException e) {
-			throw new ActionInstantiationException("アニメーションの作成に失敗しました(" + this + ")", e);
+			throw new ActionInstantiationException("Failed to create animation(" + this + ")", e);
 		} catch (final VariableException e) {
-			throw new ActionInstantiationException("パラメータの評価に失敗しました(" + this + ")", e);
+			throw new ActionInstantiationException("Parameter evaluation failed(" + this + ")", e);
 		}
 	}
 
@@ -162,18 +166,6 @@ public class ActionBuilder implements IActionBuilder {
 			variables.put(param.getKey(), Variable.parse(param.getValue()));
 		}
 		return variables;
-	}
-
-	String getName() {
-		return this.name;
-	}
-
-	private String getType() {
-		return this.type;
-	}
-
-	private String getClassName() {
-		return this.className;
 	}
 
 	private Map<String, String> getParams() {

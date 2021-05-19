@@ -9,7 +9,10 @@ import javax.swing.SwingUtilities;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.action.Action;
+import com.group_finity.mascot.config.BehaviourName;
 import com.group_finity.mascot.config.Configuration;
+import com.group_finity.mascot.config.LocalizedConfiguration;
+import com.group_finity.mascot.config.XmlLanguages;
 import com.group_finity.mascot.environment.MascotEnvironment;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
@@ -22,13 +25,7 @@ import com.group_finity.mascot.exception.VariableException;
 public class UserBehavior implements Behavior {
 	private static final Logger log = Logger.getLogger(UserBehavior.class.getName());
 
-	public static final String BEHAVIORNAME_FALL = "落下する";
-
-	public static final String BEHAVIORNAME_THROWN = "投げられる";
-
-	public static final String BEHAVIORNAME_DRAGGED = "ドラッグされる";
-
-	private final String name;
+	private final BehaviourName name;
 
 	private final Configuration configuration;
 
@@ -36,7 +33,7 @@ public class UserBehavior implements Behavior {
 
 	private Mascot mascot;
 
-	public UserBehavior(final String name, final Action action, final Configuration configuration) {
+	public UserBehavior(final BehaviourName name, final Action action, final Configuration configuration) {
 		this.name = name;
 		this.configuration = configuration;
 		this.action = action;
@@ -44,7 +41,7 @@ public class UserBehavior implements Behavior {
 
 	@Override
 	public String toString() {
-		return "行動(" + getName() + ")";
+		return name.toString();
 	}
 
 	@Override
@@ -58,7 +55,7 @@ public class UserBehavior implements Behavior {
 			getAction().init(mascot);
 			if (!getAction().hasNext()) {
 				try {
-					mascot.setBehavior(this.getConfiguration().buildBehavior(getName(), mascot));
+					mascot.setBehavior(this.getConfiguration().buildBehavior(name, mascot));
 				} catch (final BehaviorInstantiationException e) {
 					throw new CantBeAliveException("次の行動の初期化に失敗しました", e);
 				}
@@ -77,10 +74,6 @@ public class UserBehavior implements Behavior {
 		return this.action;
 	}
 
-	private String getName() {
-		return this.name;
-	}
-
 	/**
 	 * マウスが押された.
 	 * 左ボタンだったらドラッグ開始.
@@ -91,7 +84,7 @@ public class UserBehavior implements Behavior {
 		if (SwingUtilities.isLeftMouseButton(event)) {
 			// ドラッグ開始のお知らせ
 			try {
-				getMascot().setBehavior(this.getConfiguration().buildBehavior(BEHAVIORNAME_DRAGGED));
+				getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Dragged));
 			} catch (final BehaviorInstantiationException e) {
 				throw new CantBeAliveException("ドラッグ行動の初期化に失敗しました", e);
 			}
@@ -109,7 +102,7 @@ public class UserBehavior implements Behavior {
 		if (SwingUtilities.isLeftMouseButton(event)) {
 			// ドラッグ終了のお知らせ
 			try {
-				getMascot().setBehavior(this.getConfiguration().buildBehavior(BEHAVIORNAME_THROWN));
+				getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Thrown));
 			} catch (final BehaviorInstantiationException e) {
 				throw new CantBeAliveException("ドロップ行動の初期化に失敗しました", e);
 			}
@@ -141,7 +134,7 @@ public class UserBehavior implements Behavior {
 									+ getEnvironment().getScreen().getLeft(), getEnvironment().getScreen().getTop() - 256));
 
 					try {
-						getMascot().setBehavior(this.getConfiguration().buildBehavior(BEHAVIORNAME_FALL));
+						getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Fall));
 					} catch (final BehaviorInstantiationException e) {
 						throw new CantBeAliveException("落ちる行動の初期化に失敗しました", e);
 					}
@@ -151,7 +144,7 @@ public class UserBehavior implements Behavior {
 				log.log(Level.INFO, "行動完了({0},{1})", new Object[] { getMascot(), this });
 
 				try {
-					getMascot().setBehavior(this.getConfiguration().buildBehavior(getName(), getMascot()));
+					getMascot().setBehavior(this.getConfiguration().buildBehavior(name, getMascot()));
 				} catch (final BehaviorInstantiationException e) {
 					throw new CantBeAliveException("次の行動の初期化に失敗しました", e);
 				}
@@ -160,7 +153,7 @@ public class UserBehavior implements Behavior {
 			log.log(Level.INFO, "地面から離れた({0},{1})", new Object[] { getMascot(), this });
 
 			try {
-				getMascot().setBehavior(this.getConfiguration().buildBehavior(BEHAVIORNAME_FALL));
+				getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Fall));
 			} catch (final BehaviorInstantiationException ex) {
 				throw new CantBeAliveException("落ちる行動の初期化に失敗しました", ex);
 			}

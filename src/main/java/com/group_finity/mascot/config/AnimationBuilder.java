@@ -31,24 +31,24 @@ public class AnimationBuilder {
 
 	public AnimationBuilder(ImagePairLoader imagePairLoader, Entry animationNode) throws IOException {
 		this.imagePairLoader = imagePairLoader;
-		this.condition = animationNode.getAttribute("条件") == null ? "true" : animationNode.getAttribute("条件");
+		this.condition = animationNode.getAttribute(XmlIdentifiers.Condition) == null ? "true" : animationNode.getAttribute(XmlIdentifiers.Condition);
 
-		log.log(Level.INFO, "アニメーション読み込み開始");
+		log.log(Level.INFO, "Start loading animation");
 
 		for (final Entry frameNode : animationNode.getChildren()) {
 
 			this.getPoses().add(loadPose(frameNode));
 		}
 
-		log.log(Level.INFO, "アニメーション読み込み完了");
+		log.log(Level.INFO, "Loading complete");
 	}
 
 	private Pose loadPose(final Entry frameNode) throws IOException {
 
-		final String imageText = frameNode.getAttribute("画像");
-		final String anchorText = frameNode.getAttribute("基準座標");
-		final String moveText = frameNode.getAttribute("移動速度");
-		final String durationText = frameNode.getAttribute("長さ");
+		final String imageText = frameNode.getAttribute(XmlIdentifiers.Image);
+		final String anchorText = frameNode.getAttribute(XmlIdentifiers.ImageAnchor);
+		final String moveText = frameNode.getAttribute(XmlIdentifiers.Velocity);
+		final String durationText = frameNode.getAttribute(XmlIdentifiers.Duration);
 
 		final String[] anchorCoordinates = anchorText.split(",");
 		final Point anchor = new Point(Integer.parseInt(anchorCoordinates[0]), Integer.parseInt(anchorCoordinates[1]));
@@ -109,7 +109,7 @@ public class AnimationBuilder {
 		move = new Point(newx,newy); 
 		final Pose pose = new Pose(image, move.x, move.y, duration);
 
-		log.log(Level.INFO, "姿勢読み込み({0})", pose);
+		log.log(Level.INFO, "Pose reading({0})", pose);
 
 		return pose;
 
@@ -119,7 +119,7 @@ public class AnimationBuilder {
 		try {
 			return new Animation(Variable.parse(this.getCondition()), this.getPoses().toArray(new Pose[0]));
 		} catch (final VariableException e) {
-			throw new AnimationInstantiationException("条件の評価に失敗しました", e);
+			throw new AnimationInstantiationException("Condition evaluation failed", e);
 		}
 	}
 

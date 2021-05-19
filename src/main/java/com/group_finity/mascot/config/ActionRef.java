@@ -22,7 +22,7 @@ public class ActionRef implements IActionBuilder {
 	public ActionRef(final Configuration configuration, final Entry refNode) {
 		this.configuration = configuration;
 
-		this.name = refNode.getAttribute("名前");
+		this.name = refNode.getAttribute(XmlIdentifiers.Name);
 		this.getParams().putAll(refNode.getAttributes());
 		log.log(Level.INFO, "動作参照読み込み({0})", this);
 
@@ -55,7 +55,7 @@ public class ActionRef implements IActionBuilder {
 
 	@Override
 	public String toString() {
-		return "動作参照(" + getName() + ")";
+		return "ActionRef(" + getName() + ")";
 	}
 
 	private String getName() {
@@ -66,20 +66,16 @@ public class ActionRef implements IActionBuilder {
 		return this.params;
 	}
 
-	private Configuration getConfiguration() {
-		return this.configuration;
-	}
-
 	@Override
 	public void validate() throws ConfigurationException {
-		if (!getConfiguration().getActionBuilders().containsKey(getName())) {
-			throw new ConfigurationException("対応する動作が存在しません(" + this + ")");
+		if (!configuration.getActionBuilders().containsKey(getName())) {
+			throw new ConfigurationException("No such behaviour(" + this + ")");
 		}
 	}
 
 	public Action buildAction(final Map<String, String> params) throws ActionInstantiationException {
 		final Map<String, String> newParams = new LinkedHashMap<String, String>(params);
 		newParams.putAll(getParams());
-		return this.getConfiguration().buildAction(getName(), newParams);
+		return configuration.buildAction(getName(), newParams);
 	}
 }

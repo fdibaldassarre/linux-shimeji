@@ -25,6 +25,7 @@ public class ConfigurationFactory {
 	
 	private Path configurationFolder;
 	private String shimejiName;
+	private XmlLanguages shimejiLang;
 	private Path shimejiFolder;
 	private Path shimejiImgFolder;
 	
@@ -53,6 +54,9 @@ public class ConfigurationFactory {
 			loadDefault();
 			return;
 		}
+		String shimejiLangStr =  wini.get("shimeji", "language", String.class);
+		shimejiLang = XmlLanguages.valueOf(shimejiLangStr);
+		shimejiLang = shimejiLang == null ? XmlLanguages.JPN : shimejiLang;
 		shimejiFolder = configurationFolder.resolve(shimejiName);
 		if(!Files.exists(shimejiFolder)) {
 			throw new RuntimeException("Missing shimeji folder");
@@ -63,6 +67,7 @@ public class ConfigurationFactory {
 	private void loadDefault() {
 		shimejiName = DEFAULT_SHIMEJI;
 		shimejiFolder = null;
+		shimejiLang = XmlLanguages.JPN;
 		shimejiImgFolder = null;
 	}
 	
@@ -77,6 +82,7 @@ public class ConfigurationFactory {
 			}
 			Wini wini = new Wini(file);
 			wini.put("shimeji", "name", shimejiName);
+			wini.put("shimeji", "language", shimejiLang.toString());
 			
 			wini.store();
 		} catch (Exception e) {
@@ -85,7 +91,7 @@ public class ConfigurationFactory {
 	}
 
 	public Configuration load() throws ConfigurationException {
-		Configuration configuration = new Configuration(shimejiImgFolder);
+		Configuration configuration = new LocalizedConfiguration(shimejiImgFolder, shimejiLang);
 		
 		loadBehaviour(configuration);
 		loadActions(configuration);
@@ -114,7 +120,7 @@ public class ConfigurationFactory {
 			throw new RuntimeException(e);
 		}
 		try {
-			configuration.load(new Entry(actions.getDocumentElement()));
+			configuration.load(new Entry(actions.getDocumentElement(), configuration.getLanguage()));
 		} catch (IOException | ConfigurationException e) {
 			throw new RuntimeException(e);
 		}
