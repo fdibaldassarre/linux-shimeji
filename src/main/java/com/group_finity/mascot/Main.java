@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 
+import com.group_finity.mascot.config.BehaviourName;
 import com.group_finity.mascot.config.Configuration;
 import com.group_finity.mascot.config.ConfigurationFactory;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
@@ -30,7 +31,7 @@ public class Main {
 
 	private static final Logger log = Logger.getLogger(Main.class.getName());
 
-	static final String BEHAVIOR_GATHER = "マウスの周りに集まる";
+	static final BehaviourName BEHAVIOR_GATHER = BehaviourName.ChaseMouse;
 
 	static {
 		try {
@@ -197,7 +198,7 @@ public class Main {
 		mascot.setLookRight(Math.random() < 0.5);
 
 		try {
-			mascot.setBehavior(getConfiguration().buildBehavior((String) null, mascot));
+			mascot.setBehavior(getConfiguration().buildBehavior(null, mascot));
 
 			this.getManager().add(mascot);
 

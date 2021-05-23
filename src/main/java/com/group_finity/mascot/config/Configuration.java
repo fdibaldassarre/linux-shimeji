@@ -23,17 +23,14 @@ public interface Configuration {
 	Behavior buildBehavior(String name) throws BehaviorInstantiationException;
 	
 	Behavior buildBehavior(BehaviourName name) throws BehaviorInstantiationException;
-	
-	@Deprecated
-	Behavior buildBehavior(String previousName, Mascot mascot) throws BehaviorInstantiationException;
-	
+		
 	Behavior buildBehavior(BehaviourName previousName, Mascot mascot) throws BehaviorInstantiationException;
 	
 	Path getShimejiImgFolder();
 	
 	Map<String, ActionBuilder> getActionBuilders();
 	
-	Action buildAction(final String name, final Map<String, String> params) throws ActionInstantiationException;
+	Action buildAction(final String name, final Map<XmlIdentifiers, String> params) throws ActionInstantiationException;
 	
 	
 }

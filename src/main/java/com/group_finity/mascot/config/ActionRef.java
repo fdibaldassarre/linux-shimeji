@@ -17,7 +17,7 @@ public class ActionRef implements IActionBuilder {
 
 	private final String name;
 
-	private final Map<String, String> params = new LinkedHashMap<String, String>();
+	private final Map<XmlIdentifiers, String> params = new LinkedHashMap<>();
 
 	public ActionRef(final Configuration configuration, final Entry refNode) {
 		this.configuration = configuration;
@@ -28,6 +28,8 @@ public class ActionRef implements IActionBuilder {
 
 	// Convert every non-jump ActionReference to multiwindow format.
 	// Necessary for using 'standard' configurations. 
+		// TODO
+		/*
 		if (!name.contains("ジャンプ")) {
 			String s = params.get("目的地X");
 			if (s != null) {
@@ -51,6 +53,7 @@ public class ActionRef implements IActionBuilder {
 				}
 			}
 		}
+		*/
 	}
 
 	@Override
@@ -62,7 +65,7 @@ public class ActionRef implements IActionBuilder {
 		return this.name;
 	}
 
-	private Map<String, String> getParams() {
+	private Map<XmlIdentifiers, String> getParams() {
 		return this.params;
 	}
 
@@ -73,8 +76,8 @@ public class ActionRef implements IActionBuilder {
 		}
 	}
 
-	public Action buildAction(final Map<String, String> params) throws ActionInstantiationException {
-		final Map<String, String> newParams = new LinkedHashMap<String, String>(params);
+	public Action buildAction(final Map<XmlIdentifiers, String> params) throws ActionInstantiationException {
+		final Map<XmlIdentifiers, String> newParams = new LinkedHashMap<>(params);
 		newParams.putAll(getParams());
 		return configuration.buildAction(getName(), newParams);
 	}

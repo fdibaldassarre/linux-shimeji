@@ -40,7 +40,7 @@ public class BehaviorBuilder {
 
 	private final List<BehaviorBuilder> nextBehaviorBuilders = new ArrayList<BehaviorBuilder>();
 
-	private final Map<String, String> params = new LinkedHashMap<String, String>();
+	private final Map<XmlIdentifiers, String> params = new LinkedHashMap<>();
 
 	private final XmlLanguages language;
 
@@ -57,6 +57,7 @@ public class BehaviorBuilder {
 
 	// Conversion to multiwindow environment checks
 	// Also set IE throw frequency to 0
+		// TODO: convert to ENG/JPN switch
 		if (name.contains("投げる")) frequency = 0;
 		if (name.equals("落下する")) frequency = 1;
 		if (!name.contains("に飛びつく")) {
@@ -69,19 +70,19 @@ public class BehaviorBuilder {
 			}
 		}
 
-		log.log(Level.INFO, "行動読み込み開始({0})", this);
+		log.log(Level.INFO, "Read actions({0})", this);
 
 		this.getParams().putAll(behaviorNode.getAttributes());
-		this.getParams().remove("名前");
-		this.getParams().remove("動作");
-		this.getParams().remove("頻度");
-		this.getParams().remove("条件");
+		this.getParams().remove(XmlIdentifiers.Name);
+		this.getParams().remove(XmlIdentifiers.Action);
+		this.getParams().remove(XmlIdentifiers.Frequency);
+		this.getParams().remove(XmlIdentifiers.Condition);
 
 		boolean nextAdditive = true;
 
 		for (final Entry nextList : behaviorNode.selectChildren(XmlIdentifiers.NextBehavior)) {
 
-			log.log(Level.INFO, "次の行動リスト...");
+			log.log(Level.INFO, "Next action list...");
 
 			nextAdditive = Boolean.parseBoolean(nextList.getAttribute(XmlIdentifiers.Add));
 
@@ -90,7 +91,7 @@ public class BehaviorBuilder {
 
 		this.nextAdditive = nextAdditive;
 
-		log.log(Level.INFO, "行動読み込み完了({0})", this);
+		log.log(Level.INFO, "Action Loading completed({0})", this);
 
 	}
 
@@ -103,14 +104,14 @@ public class BehaviorBuilder {
 
 		for (final Entry node : list.getChildren()) {
 
-			if (node.getName().equals(XmlIdentifiers.Condition.getName(language))) {
+			if (node.getName().equals(XmlIdentifiers.Condition)) {
 
 				final List<String> newConditions = new ArrayList<String>(conditions);
 				newConditions.add(node.getAttribute(XmlIdentifiers.Condition));
 
 				loadBehaviors(node, newConditions);
 
-			} else if (node.getName().equals(XmlIdentifiers.BehaviorReference.getName(language))) {
+			} else if (node.getName().equals(XmlIdentifiers.BehaviorReference)) {
 				final BehaviorBuilder behavior = new BehaviorBuilder(language, getConfiguration(), node, conditions);
 				getNextBehaviorBuilders().add(behavior);
 			}
@@ -161,7 +162,7 @@ public class BehaviorBuilder {
 		return this.actionName;
 	}
 
-	private Map<String, String> getParams() {
+	private Map<XmlIdentifiers, String> getParams() {
 		return this.params;
 	}
 

@@ -71,14 +71,14 @@ public class LocalizedConfiguration implements Configuration {
 
 	private void loadBehaviors(final Entry list, final List<String> conditions) {
 		for (final Entry node : list.getChildren()) {
-			if (node.getName().equals(XmlIdentifiers.Condition.getName(language))) {
+			if (node.getName().equals(XmlIdentifiers.Condition)) {
 
 				final List<String> newConditions = new ArrayList<String>(conditions);
 				newConditions.add(node.getAttribute(XmlIdentifiers.Condition));
 
 				loadBehaviors(node, newConditions);
 
-			} else if (node.getName().equals(XmlIdentifiers.Behavior.getName(language))) {
+			} else if (node.getName().equals(XmlIdentifiers.Behavior)) {
 				final BehaviorBuilder behavior = new BehaviorBuilder(language, this, node, conditions);
 				behaviorBuilders.put(behavior.getName(), behavior);
 			}
@@ -86,7 +86,7 @@ public class LocalizedConfiguration implements Configuration {
 	}
 	
 	@Override
-	public Action buildAction(final String name, final Map<String, String> params) throws ActionInstantiationException {
+	public Action buildAction(final String name, final Map<XmlIdentifiers, String> params) throws ActionInstantiationException {
 
 		final ActionBuilder factory = this.actionBuilders.get(name);
 		if (factory == null) {
@@ -104,12 +104,6 @@ public class LocalizedConfiguration implements Configuration {
 		for(final BehaviorBuilder builder : behaviorBuilders.values()) {
 			builder.validate();
 		}
-	}
-	
-	@Override
-	public Behavior buildBehavior(final String previousName, final Mascot mascot) throws BehaviorInstantiationException {
-		BehaviourName name = BehaviourName.parseString(previousName, language);
-		return buildBehavior(name, mascot);
 	}
 	
 	@Override

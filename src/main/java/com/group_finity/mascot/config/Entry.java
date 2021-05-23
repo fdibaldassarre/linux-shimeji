@@ -12,16 +12,15 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-// TODO: remove methods with String input signature (e.g. getAttributes(String tagName))
 public class Entry {
 
 	private final Element element;
 	
-	private Map<String, String> attributes;
+	private Map<XmlIdentifiers, String> attributes;
 	
 	private List<Entry> children;
 	
-	private Map<String, List<Entry> > selected = new HashMap<String, List<Entry>>();
+	private Map<XmlIdentifiers, List<Entry> > selected = new HashMap<>();
 
 	private final XmlLanguages language;
 	
@@ -30,20 +29,23 @@ public class Entry {
 		this.language = language;
 	}
 	
-	public String getName() {
-		return this.element.getTagName();
+	public XmlIdentifiers getName() {
+		String tagName = this.element.getTagName();
+		return XmlIdentifiers.parseString(tagName, language);
 	}
+
 	
-	public Map<String, String> getAttributes() {
+	public Map<XmlIdentifiers, String> getAttributes() {
 		if ( this.attributes!=null) {
 			return this.attributes;
 		}
 		
-		this.attributes = new LinkedHashMap<String, String>();
+		this.attributes = new LinkedHashMap<>();
 		final NamedNodeMap attrs = this.element.getAttributes();
 		for(int i = 0; i<attrs.getLength(); ++i ) {
 			final Attr attr = (Attr)attrs.item(i);
-			this.attributes.put(attr.getName(), attr.getValue());
+			XmlIdentifiers ide = XmlIdentifiers.parseString(attr.getName(), language);
+			this.attributes.put(ide, attr.getValue());
 		}
 		
 		return this.attributes;
@@ -51,11 +53,6 @@ public class Entry {
 	
 	public String getAttribute(XmlIdentifiers attributeIdentifier){
 		String attributeName = attributeIdentifier.getName(language);
-		return getAttribute(attributeName);
-	}
-	
-	@Deprecated
-	public String getAttribute(final String attributeName){
 		final Attr attribute = this.element.getAttributeNode(attributeName);
 		if ( attribute==null ) {
 			return null;
@@ -64,28 +61,23 @@ public class Entry {
 	}
 	
 	public List<Entry> selectChildren(XmlIdentifiers tagIdentifier) {
-		String tagName = tagIdentifier.getName(language);
-		return selectChildren(tagName);
-	}
-	
-	@Deprecated
-	public List<Entry> selectChildren(final String tagName) {
-		
-		List<Entry> children = this.selected.get(tagName);
+
+		List<Entry> children = this.selected.get(tagIdentifier);
 		if ( children!=null ) {
 			return children;
 		}
 		children = new ArrayList<Entry>();
 		for( final Entry child : getChildren() ) {
-			if ( child.getName().equals(tagName)) {
+			if ( child.getName().equals(tagIdentifier)) {
 				children.add(child);
 			}
 		}
 		
-		this.selected.put(tagName, children);
+		this.selected.put(tagIdentifier, children);
 		
 		return children;
 	}
+
 
 	public List<Entry> getChildren() {
 		

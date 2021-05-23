@@ -20,7 +20,6 @@ import com.group_finity.mascot.exception.ActionInstantiationException;
 import com.group_finity.mascot.exception.AnimationInstantiationException;
 import com.group_finity.mascot.exception.ConfigurationException;
 import com.group_finity.mascot.exception.VariableException;
-import com.group_finity.mascot.script.Variable;
 import com.group_finity.mascot.script.VariableMap;
 
 public class ActionBuilder implements IActionBuilder {
@@ -33,7 +32,7 @@ public class ActionBuilder implements IActionBuilder {
 
 	private final String className;
 
-	private final Map<String, String> params = new LinkedHashMap<String, String>();
+	private final Map<XmlIdentifiers, String> params = new LinkedHashMap<>();
 
 	private final List<AnimationBuilder> animationBuilders = new ArrayList<AnimationBuilder>();
 
@@ -56,9 +55,9 @@ public class ActionBuilder implements IActionBuilder {
 		}
 
 		for (final Entry node : actionNode.getChildren()) {
-			if (node.getName().equals(XmlIdentifiers.ActionReference.getName(language))) {
+			if (node.getName().equals(XmlIdentifiers.ActionReference)) {
 				this.getActionRefs().add(new ActionRef(configuration, node));
-			} else if (node.getName().equals(XmlIdentifiers.Action.getName(language))) {
+			} else if (node.getName().equals(XmlIdentifiers.Action)) {
 				this.getActionRefs().add(new ActionBuilder(language, configuration, node));
 			}
 		}
@@ -76,7 +75,7 @@ public class ActionBuilder implements IActionBuilder {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Action buildAction(final Map<String, String> params) throws ActionInstantiationException {
+	public Action buildAction(final Map<XmlIdentifiers, String> params) throws ActionInstantiationException {
 
 		try {
 			// 変数マップを生成
@@ -144,7 +143,7 @@ public class ActionBuilder implements IActionBuilder {
 	private List<Action> createActions() throws ActionInstantiationException {
 		final List<Action> actions = new ArrayList<Action>();
 		for (final IActionBuilder ref : this.getActionRefs()) {
-			actions.add(ref.buildAction(new HashMap<String, String>()));
+			actions.add(ref.buildAction(new HashMap<XmlIdentifiers, String>()));
 		}
 		return actions;
 	}
@@ -157,18 +156,22 @@ public class ActionBuilder implements IActionBuilder {
 		return animations;
 	}
 
-	private VariableMap createVariables(final Map<String, String> params) throws VariableException {
+	private VariableMap createVariables(final Map<XmlIdentifiers, String> params) throws VariableException {
 		final VariableMap variables = new VariableMap();
-		for (final Map.Entry<String, String> param : this.getParams().entrySet()) {
+		return variables;
+		/*
+		 * TODO: support for other languages
+		for (final Map.Entry<XmlIdentifiers, String> param : this.getParams().entrySet()) {
 			variables.put(param.getKey(), Variable.parse(param.getValue()));
 		}
-		for (final Map.Entry<String, String> param : params.entrySet()) {
+		for (final Map.Entry<XmlIdentifiers, String> param : params.entrySet()) {
 			variables.put(param.getKey(), Variable.parse(param.getValue()));
 		}
 		return variables;
+		*/
 	}
 
-	private Map<String, String> getParams() {
+	private Map<XmlIdentifiers, String> getParams() {
 		return this.params;
 	}
 
