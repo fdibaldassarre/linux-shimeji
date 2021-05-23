@@ -11,8 +11,6 @@ import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.config.BehaviourName;
 import com.group_finity.mascot.config.Configuration;
-import com.group_finity.mascot.config.LocalizedConfiguration;
-import com.group_finity.mascot.config.XmlLanguages;
 import com.group_finity.mascot.environment.MascotEnvironment;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;

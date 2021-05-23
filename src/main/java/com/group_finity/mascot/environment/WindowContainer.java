@@ -1,6 +1,5 @@
 package com.group_finity.mascot.environment;
 
-import java.awt.Rectangle;
 import java.awt.Point;
 import java.util.Hashtable;
 import java.util.Iterator;

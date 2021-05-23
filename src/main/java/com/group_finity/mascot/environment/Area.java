@@ -1,11 +1,6 @@
 package com.group_finity.mascot.environment;
 
 import java.awt.Rectangle;
-import java.util.Hashtable;
-import com.group_finity.mascot.Mascot;
-import java.util.Vector;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Area {
 

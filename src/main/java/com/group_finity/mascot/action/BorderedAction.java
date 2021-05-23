@@ -11,8 +11,6 @@ import com.group_finity.mascot.exception.LostGroundException;
 import com.group_finity.mascot.exception.VariableException;
 import com.group_finity.mascot.script.VariableMap;
 import com.group_finity.mascot.environment.NotOnVisibleBorder;
-import com.group_finity.mascot.environment.FloorCeiling;
-import com.group_finity.mascot.environment.Wall;
 
 
 /**

@@ -1,18 +1,15 @@
 package com.group_finity.mascot.x11;
 
 import java.awt.Rectangle;
-import java.awt.Point;
-import java.util.Vector;
 import jnacontrib.x11.api.X.Display;
 import jnacontrib.x11.api.X.X11Exception;
 import jnacontrib.x11.api.X.Window;
 import com.group_finity.mascot.environment.Area;
 import com.group_finity.mascot.environment.WindowContainer;
 import com.group_finity.mascot.environment.Environment;
-import com.sun.jna.platform.unix.X11;
+
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.Iterator;
 import java.util.Random;
 

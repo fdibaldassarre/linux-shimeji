@@ -8,8 +8,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.group_finity.mascot.config.BehaviourName;
 import com.group_finity.mascot.config.Configuration;
-import com.group_finity.mascot.config.LocalizedConfiguration;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 
@@ -215,16 +215,16 @@ public class Manager {
 	 * @param configuration
 	 * @param name
 	 */
-	public void setBehaviorAll(final Configuration configuration, final String name) {
+	public void setBehaviorAll(final Configuration configuration, final BehaviourName behaviour) {
 		synchronized (this.getMascots()) {
 			for (final Mascot mascot : this.getMascots()) {
 				try {
-					mascot.setBehavior(configuration.buildBehavior(name));
+					mascot.setBehavior(configuration.buildBehavior(behaviour));
 				} catch (final BehaviorInstantiationException e) {
-					log.log(Level.SEVERE, "次の行動の初期化に失敗しました", e);
+					log.log(Level.SEVERE, "Failed to initialize next action", e);
 					mascot.dispose();
 				} catch (final CantBeAliveException e) {
-					log.log(Level.SEVERE, "生き続けることが出来ない状況", e);
+					log.log(Level.SEVERE, "Cannot be alive", e);
 					mascot.dispose();
 				}
 			}

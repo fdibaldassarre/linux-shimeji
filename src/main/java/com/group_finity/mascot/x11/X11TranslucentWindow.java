@@ -81,7 +81,6 @@ class X11TranslucentWindow extends JWindow implements TranslucentWindow {
     private com.sun.jna.Memory buffer;
     private int[] pixels;
 
-	@SuppressWarnings("deprecation")
 	private void updateX11() {	 
         try {
                 if (win == null) {

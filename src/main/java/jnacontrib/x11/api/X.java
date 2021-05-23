@@ -16,7 +16,6 @@ package jnacontrib.x11.api;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
-import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.NativeLongByReference;
@@ -479,7 +478,7 @@ public class X {
                 for (int keyNr = 0; keyNr < count; keyNr++) {
                     byte key = keys[modNr*count + keyNr];
                     if (key != 0) {
-                        modifier.add(new Byte(key));
+                        modifier.add(Byte.valueOf(key));
                     }
                 }
             }
