@@ -27,8 +27,37 @@ public enum XmlIdentifiers {
 	Behavior("行動", "Behavior"),
 	NextBehavior("次の行動リスト", "NextBehavior"),
 	Add("追加", "Add"),
-	BehaviorReference("行動参照", "BehaviorReference")
+	BehaviorReference("行動参照", "BehaviorReference"),
+	BorderType("枠", "BorderType"),
+	
+	IeOffsetX("IEの端X", "IeOffsetX"),
+	IeOffsetY("IEの端Y", "IeOffsetY"),
+	
+	Gravity("重力", "Gravity"),
+	InitialVX("初速X", "InitialVX"),
+	InitialVY("初速Y", "InitialVY"),
+	VelocityParam("速度", "VelocityParam"),
+	RegistanceX("空気抵抗X", "RegistanceX"),
+	RegistanceY("空気抵抗Y", "RegistanceY"),
+	
+	Loop("繰り返し", "Loop"),
+	
+	X("X", "X"),
+	Y("Y", "Y"),
+	
+	TargetX("目的地X", "TargetX"),
+	TargetY("目的地Y", "TargetY"),
+	
+	LookRight("右向き", "LookRight"),
+	
+	Gap("ずれ", "Gap"),
+	
+	BornBehavior("生まれた時の行動", "BornBehavior"),
+	BornX("生まれる場所X", "BornX"),
+	BornY("生まれる場所Y", "BornY"),
 
+	// ENG-only?
+	Hidden("", "Hidden")
 	;
 
 	private final String jpnId;
@@ -45,6 +74,16 @@ public enum XmlIdentifiers {
 		} else {
 			return engId;
 		}
+	}
+	
+	public static XmlIdentifiers parseString(String name, XmlLanguages language) {
+		for(XmlIdentifiers behaviour: XmlIdentifiers.values()) {
+			String localized = behaviour.getName(language);
+			if(localized.equals(name)) {
+				return behaviour;
+			}
+		}
+		throw new IllegalArgumentException("Invalid identifier " + name);
 	}
 	
 }
