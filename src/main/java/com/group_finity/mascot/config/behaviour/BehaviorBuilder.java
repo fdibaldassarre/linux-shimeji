@@ -27,7 +27,6 @@ public class BehaviorBuilder {
 
 	private final Configuration configuration;
 
-	private final String name;
 	private final BehaviourName behaviourName;
 
 	private final String actionName;
@@ -47,8 +46,8 @@ public class BehaviorBuilder {
 	public BehaviorBuilder(XmlLanguages language, Configuration configuration, final Entry behaviorNode, final List<String> conditions) {
 		this.language = language;
 		this.configuration = configuration;
-		this.name = behaviorNode.getAttribute(XmlIdentifiers.Name);
-		this.behaviourName = BehaviourName.parseString(this.name, language);
+		String name = behaviorNode.getAttribute(XmlIdentifiers.Name);
+		this.behaviourName = BehaviourName.parseString(name, language);
 		String action = behaviorNode.getAttribute(XmlIdentifiers.Action);
 		this.actionName = action == null ? name : action;
 		this.frequency = Integer.parseInt(behaviorNode.getAttribute(XmlIdentifiers.Frequency));
@@ -57,10 +56,9 @@ public class BehaviorBuilder {
 
 	// Conversion to multiwindow environment checks
 	// Also set IE throw frequency to 0
-		// TODO: convert to ENG/JPN switch
-		if (name.contains("投げる")) frequency = 0;
-		if (name.equals("落下する")) frequency = 1;
-		if (!name.contains("に飛びつく")) {
+		if (behaviourName.isIeThrow()) frequency = 0;
+		if (behaviourName == BehaviourName.Fall) frequency = 1;
+		if (!behaviourName.isJump()) {
 			if (conditions != null) {
 				for (int i=0;i<conditions.size();i++) {
 					String s = conditions.get(i);
