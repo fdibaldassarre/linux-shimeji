@@ -6,10 +6,13 @@ import java.util.logging.Logger;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.environment.MascotEnvironment;
 import com.group_finity.mascot.exception.LostGroundException;
 import com.group_finity.mascot.exception.VariableException;
+import com.group_finity.mascot.script.Constant;
 import com.group_finity.mascot.script.Variable;
+import com.group_finity.mascot.script.VariableIdentifier;
 import com.group_finity.mascot.script.VariableMap;
 
 /**
@@ -20,11 +23,7 @@ public abstract class ActionBase implements Action {
 
 	private static final Logger log = Logger.getLogger(ActionBase.class.getName());
 
-	public static final String PARAMETER_DURATION = "長さ";
-
 	private static final boolean DEFAULT_CONDITION = true;
-
-	public static final String PARAMETER_CONDITION = "条件";
 
 	private static final int DEFAULT_DURATION = Integer.MAX_VALUE;
 
@@ -44,9 +43,9 @@ public abstract class ActionBase implements Action {
 	@Override
 	public String toString() {
 		try {
-			return "動作(" + getClass().getSimpleName() + "," + getName() + ")";
+			return "ActionBase(" + getClass().getSimpleName() + "," + getName() + ")";
 		} catch (final VariableException e) {
-			return "動作(" + getClass().getSimpleName() + "," + null + ")";
+			return "ActionBase(" + getClass().getSimpleName() + "," + null + ")";
 		}
 	}
 
@@ -58,8 +57,8 @@ public abstract class ActionBase implements Action {
 		log.log(Level.INFO, "動作開始({0},{1})", new Object[] { getMascot(), this });
 
 		// スクリプトで使用できるようにmascotとactionを変数マップに追加しておく
-		this.getVariables().put("mascot", mascot);
-		this.getVariables().put("action", this);
+		this.getVariables().put(VariableIdentifier.mascot, new Constant(mascot));
+		this.getVariables().put(VariableIdentifier.action, new Constant(this));
 
 		// 変数の値を初期化
 		getVariables().init();
@@ -103,11 +102,11 @@ public abstract class ActionBase implements Action {
 	}
 
 	private Boolean isEffective() throws VariableException {
-		return eval(PARAMETER_CONDITION, Boolean.class, DEFAULT_CONDITION);
+		return eval(XmlIdentifiers.Condition, Boolean.class, DEFAULT_CONDITION);
 	}
 
 	private int getDuration() throws VariableException {
-		return eval(PARAMETER_DURATION, Number.class, DEFAULT_DURATION).intValue();
+		return eval(XmlIdentifiers.Duration, Number.class, DEFAULT_DURATION).intValue();
 	}
 
 	private void setMascot(final Mascot mascot) {
@@ -127,7 +126,7 @@ public abstract class ActionBase implements Action {
 	}
 
 	private String getName() throws VariableException {
-		return this.eval("名前", String.class, null);
+		return this.eval(XmlIdentifiers.Name, String.class, null);
 	}
 
 	protected Animation getAnimation() throws VariableException {
@@ -141,20 +140,32 @@ public abstract class ActionBase implements Action {
 		return null;
 	}
 
-	private VariableMap getVariables() {
+	protected VariableMap getVariables() {
 		return this.variables;
 	}
 
-	protected void putVariable(final String key, final Object value) {
+	protected void putVariable(final VariableIdentifier key, final Constant value) {
 		synchronized (getVariables()) {
 			getVariables().put(key, value);
 		}
 	}
 
-	protected <T> T eval(final String name, final Class<T> type, final T defaultValue) throws VariableException {
+	protected <T> T eval(final VariableIdentifier ide, final Class<T> type, final T defaultValue) throws VariableException {
 
 		synchronized (getVariables()) {
-			final Variable variable = getVariables().getRawMap().get(name);
+			final Variable variable = getVariables().get(ide);
+			if (variable != null) {
+				return type.cast(variable.get(getVariables()));
+			}
+		}
+
+		return defaultValue;
+	}
+	
+	protected <T> T eval(final XmlIdentifiers ide, final Class<T> type, final T defaultValue) throws VariableException {
+
+		synchronized (getVariables()) {
+			final Variable variable = getVariables().get(ide);
 			if (variable != null) {
 				return type.cast(variable.get(getVariables()));
 			}

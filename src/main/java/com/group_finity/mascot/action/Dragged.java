@@ -9,16 +9,14 @@ import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.environment.Location;
 import com.group_finity.mascot.exception.LostGroundException;
 import com.group_finity.mascot.exception.VariableException;
+import com.group_finity.mascot.script.Constant;
+import com.group_finity.mascot.script.VariableIdentifier;
 import com.group_finity.mascot.script.VariableMap;
 
 /**
  * ドラッグされてるアクション.
  */
 public class Dragged extends ActionBase {
-
-	private static final Logger log = Logger.getLogger(Dragged.class.getName());
-
-	private static final String VARIABLE_FOOTX = "footX";
 
 	private double footX;
 
@@ -66,7 +64,7 @@ public class Dragged extends ActionBase {
 		this.setFootX(this.getFootX() + this.getFootDx());
 
 		// アニメーションの条件に足の位置が含まれる可能性があるので変数に入れておく
-		putVariable(VARIABLE_FOOTX, this.getFootX());
+		putVariable(VariableIdentifier.footX, new Constant(this.getFootX()));
 
 		// アニメーションさせる
 		getAnimation().next(getMascot(), getTime());

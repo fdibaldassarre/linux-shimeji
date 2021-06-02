@@ -19,13 +19,15 @@ import com.group_finity.mascot.exception.ActionInstantiationException;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.ConfigurationException;
 import com.group_finity.mascot.exception.VariableException;
+import com.group_finity.mascot.script.Constant;
+import com.group_finity.mascot.script.VariableIdentifier;
 import com.group_finity.mascot.script.VariableMap;
 
 public class LocalizedConfiguration implements Configuration {
 
 	private static final Logger log = Logger.getLogger(LocalizedConfiguration.class.getName());
 
-	private final Map<String, String> constants = new LinkedHashMap<String, String>();
+	//private final Map<String, String> constants = new LinkedHashMap<String, String>();
 
 	private final Map<String, ActionBuilder> actionBuilders = new LinkedHashMap<>();
 
@@ -45,10 +47,11 @@ public class LocalizedConfiguration implements Configuration {
 
 		log.log(Level.INFO, "Start reading settings");
 
-		for (final Entry constant : configurationNode.selectChildren(XmlIdentifiers.Constant)) {
-			log.log(Level.INFO, "Add constant");
-			constants.put( constant.getAttribute(XmlIdentifiers.Name), constant.getAttribute(XmlIdentifiers.Value) );
-		}
+		// TODO: constants support
+//		for (final Entry constant : configurationNode.selectChildren(XmlIdentifiers.Constant)) {
+//			log.log(Level.INFO, "Add constant");
+//			constants.put( constant.getAttribute(XmlIdentifiers.Name), constant.getAttribute(XmlIdentifiers.Value) );
+//		}
 
 		for (final Entry list : configurationNode.selectChildren(XmlIdentifiers.ActionList)) {
 			log.log(Level.INFO, "Reading action list");
@@ -108,13 +111,13 @@ public class LocalizedConfiguration implements Configuration {
 	
 	@Override
 	public Behavior buildBehavior(BehaviourName previousName, Mascot mascot) throws BehaviorInstantiationException {
-		final VariableMap context = new VariableMap();
-		context.put("mascot", mascot);
+		final VariableMap context = new VariableMap(language);
+		context.put(VariableIdentifier.mascot, new Constant(mascot));
 
 		// TODO ここ以外で必要な場合は？根本的につくりを見直すべき
-		for( Map.Entry<String, String> e : constants.entrySet() ) {
-			context.put(e.getKey(), e.getValue());
-		}
+//		for( Map.Entry<String, String> e : constants.entrySet() ) {
+//			context.put(e.getKey(), e.getValue());
+//		}
 
 		final List<BehaviorBuilder> candidates = new ArrayList<BehaviorBuilder>();
 		long totalFrequency = 0;
@@ -170,6 +173,7 @@ public class LocalizedConfiguration implements Configuration {
 
 	@Override
 	public Behavior buildBehavior(final String name) throws BehaviorInstantiationException {
+		System.out.println("Dep" + name);
 		BehaviourName behaviourName = BehaviourName.parseString(name, language);
 		return buildBehavior(behaviourName);
 	}
@@ -177,10 +181,6 @@ public class LocalizedConfiguration implements Configuration {
 	@Override
 	public Behavior buildBehavior(BehaviourName name) throws BehaviorInstantiationException {
 		return behaviorBuilders.get(name).buildBehavior();
-	}
-
-	public Map<String, String> getConstants() {
-		return constants;
 	}
 
 	public Map<String, ActionBuilder> getActionBuilders() {

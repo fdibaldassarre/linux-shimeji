@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.exception.LostGroundException;
 import com.group_finity.mascot.exception.VariableException;
 import com.group_finity.mascot.script.VariableMap;
@@ -18,11 +19,7 @@ public class Move extends BorderedAction {
 
 	private static final Logger log = Logger.getLogger(Move.class.getName());
 
-	private static final String PARAMETER_TARGETX = "目的地X";
-
 	private static final int DEFAULT_TARGETX = Integer.MAX_VALUE;
-
-	private static final String PARAMETER_TARGETY = "目的地Y";
 
 	private static final int DEFAULT_TARGETY = Integer.MAX_VALUE;
 
@@ -102,11 +99,11 @@ public class Move extends BorderedAction {
 	}
 
 	private int getTargetY() throws VariableException {
-		return eval(PARAMETER_TARGETY, Number.class, DEFAULT_TARGETY).intValue();
+		return eval(XmlIdentifiers.TargetY, Number.class, DEFAULT_TARGETY).intValue();
 	}
 
 	private int getTargetX() throws VariableException {
-		return eval(PARAMETER_TARGETX, Number.class, DEFAULT_TARGETX).intValue();
+		return eval(XmlIdentifiers.TargetX, Number.class, DEFAULT_TARGETX).intValue();
 	}
 
 }

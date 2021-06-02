@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.environment.Border;
 import com.group_finity.mascot.exception.LostGroundException;
 import com.group_finity.mascot.exception.VariableException;
@@ -19,23 +20,11 @@ import com.group_finity.mascot.environment.NotOnVisibleBorder;
  */
 public abstract class BorderedAction extends ActionBase {
 
-	private static final Logger log = Logger.getLogger(BorderedAction.class.getName());
-
-	private static final String PARAMETER_BORDERTYPE = "枠";
-
 	public static final String DEFAULT_BORDERTYPE = null;
-
-	public static final String BORDERTYPE_CEILING = "天井";
-
-	public static final String BORDERTYPE_WALL = "壁";
-
-	public static final String BORDERTYPE_FLOOR = "地面";
 
 	private Border border;
 
-	private int cnt;
-
-	private String borderType;
+	private BorderType borderType;
 
 	public BorderedAction(final List<Animation> animations, final VariableMap params) {
 		super(animations, params);
@@ -47,11 +36,11 @@ public abstract class BorderedAction extends ActionBase {
 
 		borderType = getBorderType();
 
-		if (BORDERTYPE_CEILING.equals(borderType)) {
+		if (borderType == BorderType.Ceiling) {
 			this.setBorder(getEnvironment().getCeiling());
-		} else if (BORDERTYPE_WALL.equals(borderType)) {
+		} else if (borderType == BorderType.Wall) {
 			this.setBorder(getEnvironment().getWall());
-		} else if (BORDERTYPE_FLOOR.equals(borderType)) {
+		} else if (borderType == BorderType.Floor) {
 			this.setBorder(getEnvironment().getFloor());
 		}
 
@@ -66,8 +55,10 @@ public abstract class BorderedAction extends ActionBase {
 		}
 	}
 	
-	private String getBorderType() throws VariableException {
-		return eval(PARAMETER_BORDERTYPE, String.class, DEFAULT_BORDERTYPE);
+	private BorderType getBorderType() throws VariableException {
+		String borderRaw = eval(XmlIdentifiers.BorderType, String.class, DEFAULT_BORDERTYPE);
+		
+		return BorderType.parseString(borderRaw, getVariables().getLanguage());
 	}
 
 	private void setBorder(final Border border) {
@@ -81,7 +72,7 @@ public abstract class BorderedAction extends ActionBase {
 	@Override
 	public boolean hasNext() throws VariableException {
 		Point p = new Point();
-		if (BORDERTYPE_CEILING.equals(borderType)) {
+		if (borderType == BorderType.Ceiling) {
 			p = getMascot().getAnchor();
 				for (int i=2;i>1;i--) {
 				int x = p.x;
@@ -96,7 +87,7 @@ public abstract class BorderedAction extends ActionBase {
 			}
 			getMascot().setAnchor(p);
 		}
-		if (BORDERTYPE_WALL.equals(borderType)) {
+		if (borderType == BorderType.Wall) {
 			p = getMascot().getAnchor();
 				for (int i=2;i>0;i--) {
 				int x = p.x;
@@ -109,7 +100,7 @@ public abstract class BorderedAction extends ActionBase {
 			}
 			getMascot().setAnchor(p);
 		}
-		if (BORDERTYPE_FLOOR.equals(borderType)) {
+		if (borderType == BorderType.Floor) {
 			p = getMascot().getAnchor();
 				for (int i=2;i>0;i--) {
 				int x = p.x;

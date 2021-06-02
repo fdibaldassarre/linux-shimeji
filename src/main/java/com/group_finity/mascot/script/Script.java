@@ -27,7 +27,7 @@ public class Script extends Variable {
 		try {
 			this.compiled = ((Compilable) engine).compile(this.source);
 		} catch (final ScriptException e) {
-			throw new VariableException("スクリプトのコンパイルでエラーが発生しました: "+this.source, e);
+			throw new VariableException("Error compiling script: "+this.source, e);
 		}
 	}
 
@@ -56,9 +56,10 @@ public class Script extends Variable {
 		}
 
 		try {
-			setValue(getCompiled().eval(variables));
+			
+			setValue(getCompiled().eval(variables.getBindings()));
 		} catch (final ScriptException e) {
-			throw new VariableException("スクリプトの評価でエラーが発生しました: "+this.source, e);
+			throw new VariableException("Error evaluating script "+this.source, e);
 		}
 
 		return getValue();

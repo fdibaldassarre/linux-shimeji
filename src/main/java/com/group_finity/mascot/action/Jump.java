@@ -2,9 +2,9 @@ package com.group_finity.mascot.action;
 
 import java.awt.Point;
 import java.util.List;
-import java.util.logging.Logger;
 
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.exception.LostGroundException;
 import com.group_finity.mascot.exception.VariableException;
 import com.group_finity.mascot.script.VariableMap;
@@ -14,18 +14,10 @@ import com.group_finity.mascot.script.VariableMap;
  * ジャンプするアクション.
  */
 public class Jump extends ActionBase {
-
-	private static final Logger log = Logger.getLogger(Jump.class.getName());
-
-	public static final String PARAMETER_TARGETX = "目的地X";
 	
 	private static final int DEFAULT_PARAMETERX = 0;
-	
-	public static final String PARAMETER_TARGETY = "目的地Y";
-	
-	private static final int DEFAULT_PARAMETERY = 0;
 
-	public static final String PARAMETER_VELOCITY = "速度";
+	private static final int DEFAULT_PARAMETERY = 0;
 
 	private static final double DEFAULT_VELOCITY = 20.0;
 
@@ -79,15 +71,15 @@ public class Jump extends ActionBase {
 	}
 
 	private double getVelocity() throws VariableException {
-		return eval(PARAMETER_VELOCITY, Number.class, DEFAULT_VELOCITY).doubleValue();
+		return eval(XmlIdentifiers.VelocityParam, Number.class, DEFAULT_VELOCITY).doubleValue();
 	}
 
 	private int getTargetY() throws VariableException{
-		return eval(PARAMETER_TARGETY, Number.class, DEFAULT_PARAMETERY).intValue();
+		return eval(XmlIdentifiers.TargetY, Number.class, DEFAULT_PARAMETERY).intValue();
 	}
 
 	private int getTargetX() throws VariableException {
-		return eval(PARAMETER_TARGETX, Number.class, DEFAULT_PARAMETERX).intValue();
+		return eval(XmlIdentifiers.TargetX, Number.class, DEFAULT_PARAMETERX).intValue();
 	}
 
 }

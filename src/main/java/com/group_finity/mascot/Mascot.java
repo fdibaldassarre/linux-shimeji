@@ -94,7 +94,7 @@ public class Mascot {
 	 * マスコットの表示環境.
 	 */
 	
-	private MascotEnvironment environment = new MascotEnvironment(this);
+	private final MascotEnvironment environment = new MascotEnvironment(this);
 
 	public Mascot() {
 		this.id = lastId.incrementAndGet();

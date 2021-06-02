@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 import com.group_finity.mascot.exception.LostGroundException;
@@ -23,15 +24,9 @@ public class Breed extends Animate {
 
 	private static final Logger log = Logger.getLogger(Breed.class.getName());
 
-	public static final String PARAMETER_BORNX = "生まれる場所X";
-
 	private static final int DEFAULT_BORNX = 0;
 
-	public static final String PARAMETER_BORNY = "生まれる場所Y";
-
 	private static final int DEFAULT_BORNY = 0;
-
-	public static final String PARAMETER_BORNBEHAVIOR = "生まれた時の行動";
 
 	private static final String DEFAULT_BORNBEHAVIOR = "";
 
@@ -82,15 +77,15 @@ public class Breed extends Animate {
 	}
 
 	private Number getBornY() throws VariableException {
-		return eval(PARAMETER_BORNY, Number.class, DEFAULT_BORNY);
+		return eval(XmlIdentifiers.BornY, Number.class, DEFAULT_BORNY);
 	}
 
 	private int getBornX() throws VariableException {
-		return eval(PARAMETER_BORNX, Number.class, DEFAULT_BORNX).intValue();
+		return eval(XmlIdentifiers.BornX, Number.class, DEFAULT_BORNX).intValue();
 	}
 
 	private String getBornBehavior() throws VariableException {
-		return eval(PARAMETER_BORNBEHAVIOR, String.class, DEFAULT_BORNBEHAVIOR);
+		return eval(XmlIdentifiers.BornBehavior, String.class, DEFAULT_BORNBEHAVIOR);
 	}
 
 }

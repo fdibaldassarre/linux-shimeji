@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.environment.Area;
 import com.group_finity.mascot.exception.LostGroundException;
 import com.group_finity.mascot.exception.VariableException;
@@ -20,11 +21,7 @@ public class FallWithIE extends Fall {
 
 	private static final Logger log = Logger.getLogger(FallWithIE.class.getName());
 
-	public static final String PARAMETER_IEOFFSETX = "IEの端X";
-
 	private static final int DEFAULT_IEOFFSETX = 0;
-
-	public static final String PARAMETER_IEOFFSETY = "IEの端Y";
 
 	private static final int DEFAULT_IEOFFSETY = 0;
 
@@ -75,10 +72,10 @@ public class FallWithIE extends Fall {
 	}
 
 	private int getIEOffsetY() throws VariableException {
-		return eval(PARAMETER_IEOFFSETY, Number.class, DEFAULT_IEOFFSETY).intValue();
+		return eval(XmlIdentifiers.IeOffsetY, Number.class, DEFAULT_IEOFFSETY).intValue();
 	}
 
 	private int getIEOffsetX() throws VariableException {
-		return eval(PARAMETER_IEOFFSETX, Number.class, DEFAULT_IEOFFSETX).intValue();
+		return eval(XmlIdentifiers.IeOffsetX, Number.class, DEFAULT_IEOFFSETX).intValue();
 	}
 }

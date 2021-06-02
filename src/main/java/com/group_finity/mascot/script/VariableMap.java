@@ -1,112 +1,144 @@
 package com.group_finity.mascot.script;
 
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import javax.script.Bindings;
 
+import com.group_finity.mascot.config.XmlIdentifiers;
+import com.group_finity.mascot.config.XmlLanguages;
 import com.group_finity.mascot.exception.VariableException;
 
-public class VariableMap extends AbstractMap<String, Object> implements Bindings {
+public class VariableMap {
+	
+	
+	private class DelayedEvaluationBindings implements Bindings {
 
-	private final Map<String, Variable> rawMap = new LinkedHashMap<String, Variable>();
+		private final Map<String, Object> additional = new HashMap<>();
+		private final Map<String, Variable> variables;
+		private final VariableMap originalMap;
 
-	public Map<String, Variable> getRawMap() {
-		return this.rawMap;
-	}
-
-	public void init() {
-		for (final Variable o : this.getRawMap().values()) {
-			o.init();
-		}
-	}
-
-	public void initFrame() {
-		for (final Variable o : this.getRawMap().values()) {
-			o.initFrame();
-		}
-	}
-
-	private final Set<Map.Entry<String, Object>> entrySet = new AbstractSet<Entry<String, Object>>() {
-
-		@Override
-		public Iterator<Map.Entry<String, Object>> iterator() {
-
-			return new Iterator<Entry<String, Object>>() {
-
-				private Iterator<Map.Entry<String, Variable>> rawIterator = VariableMap.this.getRawMap().entrySet()
-						.iterator();
-
-				@Override
-				public boolean hasNext() {
-					return this.rawIterator.hasNext();
-				}
-
-				@Override
-				public Map.Entry<String, Object> next() {
-					final Map.Entry<String, Variable> rawKeyValue = this.rawIterator.next();
-					final Object value = rawKeyValue.getValue();
-
-					return new Map.Entry<String, Object>() {
-
-						@Override
-						public String getKey() {
-							return rawKeyValue.getKey();
-						}
-
-						@Override
-						public Object getValue() {
-							try {
-								return ((Variable) value).get(VariableMap.this);
-							} catch (final VariableException e) {
-								throw new RuntimeException(e);
-							}
-						}
-
-						@Override
-						public Object setValue(final Object value) {
-							throw new UnsupportedOperationException("setValue is not supported");
-						}
-
-					};
-				}
-
-				@Override
-				public void remove() {
-					this.rawIterator.remove();
-				}
-
-			};
+		DelayedEvaluationBindings(VariableMap originalMap, Map<String, Variable> variables) {
+			this.originalMap = originalMap;
+			this.variables = variables;
 		}
 
 		@Override
 		public int size() {
-			return VariableMap.this.getRawMap().size();
+			return variables.size();
 		}
 
-	};
+		@Override
+		public boolean isEmpty() {
+			return variables.isEmpty();
+		}
 
-	@Override
-	public Set<Map.Entry<String, Object>> entrySet() {
-		return this.entrySet;
+		@Override
+		public boolean containsValue(Object value) {
+			return variables.containsValue(value);
+		}
+
+		@Override
+		public void clear() {
+			variables.clear();
+		}
+
+		@Override
+		public Set<String> keySet() {
+			return variables.keySet();
+		}
+
+		@Override
+		public Collection<Object> values() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public Set<Entry<String, Object>> entrySet() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public Object put(String name, Object value) {
+			return additional.put(name, value);
+		}
+
+		@Override
+		public void putAll(Map<? extends String, ? extends Object> toMerge) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public boolean containsKey(Object key) {
+			return variables.containsKey(key) || additional.containsKey(key);
+		}
+
+		@Override
+		public Object get(Object key) {
+			try {
+				if(variables.containsKey(key)) {
+					return variables.get(key).get(originalMap);
+				} else if(additional.containsKey(key)) {
+					return additional.get(key);
+				} else {
+					return null;
+				}
+				
+			} catch (VariableException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		@Override
+		public Object remove(Object key) {
+			throw new UnsupportedOperationException();
+		}
+	}
+	
+	private final Map<String, Variable> bindings = new HashMap<>();
+	private final XmlLanguages lang;
+	
+	public VariableMap(XmlLanguages lang) {
+		this.lang = lang;
+	}
+	
+	public XmlLanguages getLanguage() {
+		return this.lang;
+	}
+	
+	public void put(VariableIdentifier ide, Variable value) {
+		bindings.put(ide.toString(), value);
+	}
+	
+	public void put(XmlIdentifiers ide, Variable value) {
+		bindings.put(ide.toString(), value);
+	}
+	
+	public Variable get(VariableIdentifier ide) {
+		return (Variable) bindings.get(ide.toString());
+	}
+	
+	public Variable get(XmlIdentifiers ide) {
+		return (Variable) bindings.get(ide.toString());
+	}
+	
+	public void init() {
+		for (Object o : bindings.values()) {
+			((Variable) o).init();
+		}
 	}
 
-	@Override
-	public Object put(final String key, final Object value) {
-		Object result;
-		
-		if (value instanceof Variable) {
-			result = this.getRawMap().put(key, (Variable)value);
-		} else {
-			result = this.getRawMap().put(key, new Constant(value));
+	public void initFrame() {
+		for (Object o : bindings.values()) {
+			((Variable) o).initFrame();
 		}
-
-		return result;
-
+	}
+	
+	public Bindings getBindings() {
+		// Need a delayed evaluation map to avoid infinite recursion since the code sucks badly
+		return new DelayedEvaluationBindings(this, bindings);
 	}
 
 }

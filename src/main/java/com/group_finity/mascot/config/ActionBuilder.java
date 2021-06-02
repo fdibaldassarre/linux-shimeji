@@ -20,6 +20,7 @@ import com.group_finity.mascot.exception.ActionInstantiationException;
 import com.group_finity.mascot.exception.AnimationInstantiationException;
 import com.group_finity.mascot.exception.ConfigurationException;
 import com.group_finity.mascot.exception.VariableException;
+import com.group_finity.mascot.script.Variable;
 import com.group_finity.mascot.script.VariableMap;
 
 public class ActionBuilder implements IActionBuilder {
@@ -40,7 +41,10 @@ public class ActionBuilder implements IActionBuilder {
 
 	private final AnimationBuilderFactory animationBuilderFactory;
 
+	private XmlLanguages language;
+
 	public ActionBuilder(XmlLanguages language, Configuration configuration, final Entry actionNode) throws IOException {
+		this.language = language;
 		animationBuilderFactory = new AnimationBuilderFactory(configuration);
 		
 		this.name = actionNode.getAttribute(XmlIdentifiers.Name);
@@ -157,10 +161,7 @@ public class ActionBuilder implements IActionBuilder {
 	}
 
 	private VariableMap createVariables(final Map<XmlIdentifiers, String> params) throws VariableException {
-		final VariableMap variables = new VariableMap();
-		return variables;
-		/*
-		 * TODO: support for other languages
+		final VariableMap variables = new VariableMap(language);
 		for (final Map.Entry<XmlIdentifiers, String> param : this.getParams().entrySet()) {
 			variables.put(param.getKey(), Variable.parse(param.getValue()));
 		}
@@ -168,7 +169,6 @@ public class ActionBuilder implements IActionBuilder {
 			variables.put(param.getKey(), Variable.parse(param.getValue()));
 		}
 		return variables;
-		*/
 	}
 
 	private Map<XmlIdentifiers, String> getParams() {

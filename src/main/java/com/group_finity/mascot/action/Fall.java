@@ -2,10 +2,10 @@ package com.group_finity.mascot.action;
 
 import java.awt.Point;
 import java.util.List;
-import java.util.logging.Logger;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.exception.LostGroundException;
 import com.group_finity.mascot.exception.VariableException;
 import com.group_finity.mascot.script.VariableMap;
@@ -15,25 +15,13 @@ import com.group_finity.mascot.script.VariableMap;
  */
 public class Fall extends ActionBase {
 
-	private static final Logger log = Logger.getLogger(Fall.class.getName());
-
-	public static final String PARAMETER_INITIALVX = "初速X";
-
 	private static final int DEFAULT_INITIALVX = 0;
-
-	private static final String PARAMETER_INITIALVY = "初速Y";
 
 	private static final int DEFAULT_INITIALVY = 0;
 
-	public static final String PARAMETER_REGISTANCEX = "空気抵抗X";
-
 	private static final double DEFAULT_REGISTANCEX = 0.05;
 
-	public static final String PARAMETER_REGISTANCEY = "空気抵抗Y";
-
 	private static final double DEFAULT_REGISTANCEY = 0.1;
-
-	public static final String PARAMETER_GRAVITY = "重力";
 
 	private static final double DEFAULT_GRAVITY = 2;
 
@@ -124,23 +112,23 @@ public class Fall extends ActionBase {
 	}
 
 	private int getInitialVy() throws VariableException {
-		return eval(PARAMETER_INITIALVY, Number.class, DEFAULT_INITIALVY).intValue();
+		return eval(XmlIdentifiers.InitialVY, Number.class, DEFAULT_INITIALVY).intValue();
 	}
 
 	private int getInitialVx() throws VariableException {
-		return eval(PARAMETER_INITIALVX, Number.class, DEFAULT_INITIALVX).intValue();
+		return eval(XmlIdentifiers.InitialVX, Number.class, DEFAULT_INITIALVX).intValue();
 	}
 
 	private double getGravity() throws VariableException {
-		return eval(PARAMETER_GRAVITY, Number.class, DEFAULT_GRAVITY).doubleValue();
+		return eval(XmlIdentifiers.Gravity, Number.class, DEFAULT_GRAVITY).doubleValue();
 	}
 
 	private double getRegistanceY() throws VariableException {
-		return eval(PARAMETER_REGISTANCEY, Number.class, DEFAULT_REGISTANCEY).doubleValue();
+		return eval(XmlIdentifiers.RegistanceY, Number.class, DEFAULT_REGISTANCEY).doubleValue();
 	}
 
 	private double getRegistanceX() throws VariableException {
-		return eval(PARAMETER_REGISTANCEX, Number.class, DEFAULT_REGISTANCEX).doubleValue();
+		return eval(XmlIdentifiers.RegistanceX, Number.class, DEFAULT_REGISTANCEX).doubleValue();
 	}
 
 	private void setVelocityY(final double velocityY) {

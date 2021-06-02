@@ -2,6 +2,7 @@ package com.group_finity.mascot.action;
 
 import java.util.logging.Logger;
 
+import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.exception.VariableException;
 import com.group_finity.mascot.script.VariableMap;
 
@@ -9,10 +10,6 @@ import com.group_finity.mascot.script.VariableMap;
  * 複数のアクションを直列に一つにまとめたアクション.
  */
 public class Sequence extends ComplexAction {
-
-	private static final Logger log = Logger.getLogger(Sequence.class.getName());
-
-	public static final String PARAMETER_LOOP = "繰り返し";
 
 	private static final boolean DEFAULT_LOOP = false;
 
@@ -34,7 +31,7 @@ public class Sequence extends ComplexAction {
 	}
 
 	private Boolean isLoop() throws VariableException {
-		return eval(PARAMETER_LOOP, Boolean.class, DEFAULT_LOOP);
+		return eval(XmlIdentifiers.Loop, Boolean.class, DEFAULT_LOOP);
 	}
 
 }
