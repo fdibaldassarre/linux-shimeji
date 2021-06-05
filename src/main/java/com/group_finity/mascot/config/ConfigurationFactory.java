@@ -23,15 +23,20 @@ public class ConfigurationFactory {
 	
 	private static final String DEFAULT_SHIMEJI = "shime";
 	
-	private Path configurationFolder;
+	private final Path configurationFolder;
+	private final Path logFolder;
 	private String shimejiName;
 	private XmlLanguages shimejiLang;
 	private Path shimejiFolder;
 	private Path shimejiImgFolder;
 	
-	public void init() {
+	public ConfigurationFactory() {
 		String homeFolder = System.getProperty("user.home");
 		configurationFolder = Paths.get(homeFolder, ".config", "shimeji");
+		logFolder = configurationFolder.resolve("log/");
+	}
+	
+	public void init() {
 		Path configFile = configurationFolder.resolve("config.ini");
 		try {
 			loadConfig(configFile);
@@ -39,6 +44,10 @@ public class ConfigurationFactory {
 			loadDefault();
 			saveConfig(configFile);
 		} 
+	}
+	
+	public Path getLogFolder() {
+		return logFolder;
 	}
 	
 	private void loadConfig(Path configFile) {

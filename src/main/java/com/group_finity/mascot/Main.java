@@ -12,7 +12,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -29,19 +28,7 @@ import com.group_finity.mascot.exception.CantBeAliveException;
  */
 public class Main {
 
-	private static final Logger log = Logger.getLogger(Main.class.getName());
-
 	static final BehaviourName BEHAVIOR_GATHER = BehaviourName.ChaseMouse;
-
-	static {
-		try {
-			LogManager.getLogManager().readConfiguration(Main.class.getResourceAsStream("/logging.properties"));
-		} catch (final SecurityException e) {
-			e.printStackTrace();
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	private static Main instance = new Main();
 
@@ -50,6 +37,8 @@ public class Main {
 	}
 
 	private final Manager manager = new Manager();
+	
+	private final Logger log;
 
 	private final ConfigurationFactory configurationFactory;
 	private Configuration configuration;
@@ -57,6 +46,10 @@ public class Main {
 	public Main() {
 		configurationFactory = new ConfigurationFactory();
 		configurationFactory.init();
+		// Initialize the log
+		ShimejiLogManager logManager = new ShimejiLogManager(configurationFactory.getLogFolder());
+		logManager.init();
+		log = Logger.getLogger(MascotEventHandler.class.getName());
 	}
 
 	public static void main(final String[] args) {
