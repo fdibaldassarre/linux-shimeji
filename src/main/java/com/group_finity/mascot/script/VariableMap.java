@@ -110,15 +110,18 @@ public class VariableMap {
 	
 	public void put(VariableIdentifier ide, Variable value) {
 		bindings.put(ide.toString(), value);
+		for(String additionalIde: ide.getAdditionalIdentifiers()) {
+			bindings.put(additionalIde, value);
+		}
 	}
 	
 	public void put(XmlIdentifiers ide, Variable value) {
 		bindings.put(ide.toString(), value);
 	}
 	
-	public Variable get(VariableIdentifier ide) {
-		return (Variable) bindings.get(ide.toString());
-	}
+//	public Variable get(VariableIdentifier ide) {
+//		return (Variable) bindings.get(ide.toString());
+//	}
 	
 	public Variable get(XmlIdentifiers ide) {
 		return (Variable) bindings.get(ide.toString());
