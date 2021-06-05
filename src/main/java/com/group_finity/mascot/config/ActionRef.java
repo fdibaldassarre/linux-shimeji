@@ -24,7 +24,7 @@ public class ActionRef implements IActionBuilder {
 
 		this.name = refNode.getAttribute(XmlIdentifiers.Name);
 		this.getParams().putAll(refNode.getAttributes());
-		log.log(Level.INFO, "動作参照読み込み({0})", this);
+		log.log(Level.INFO, "Created({0})", this);
 
 	// Convert every non-jump ActionReference to multiwindow format.
 	// Necessary for using 'standard' configurations. 

@@ -47,7 +47,7 @@ public class UserBehavior implements Behavior {
 
 		this.setMascot(mascot);
 
-		log.log(Level.INFO, "行動開始({0},{1})", new Object[] { this.getMascot(), this });
+		log.log(Level.INFO, "Action begins({0},{1})", new Object[] { this.getMascot(), this });
 
 		try {
 			getAction().init(mascot);
@@ -55,11 +55,11 @@ public class UserBehavior implements Behavior {
 				try {
 					mascot.setBehavior(this.getConfiguration().buildBehavior(name, mascot));
 				} catch (final BehaviorInstantiationException e) {
-					throw new CantBeAliveException("次の行動の初期化に失敗しました", e);
+					throw new CantBeAliveException("Failed to initialize the next action", e);
 				}
 			}
 		} catch (final VariableException e) {
-			throw new CantBeAliveException("変数の評価でエラーが発生しました", e);
+			throw new CantBeAliveException("An error occurred during variable evaluation", e);
 		}
 
 	}
@@ -84,7 +84,7 @@ public class UserBehavior implements Behavior {
 			try {
 				getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Dragged));
 			} catch (final BehaviorInstantiationException e) {
-				throw new CantBeAliveException("ドラッグ行動の初期化に失敗しました", e);
+				throw new CantBeAliveException("Cannot initialize Dragged behaviour", e);
 			}
 		}
 
@@ -102,7 +102,7 @@ public class UserBehavior implements Behavior {
 			try {
 				getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Thrown));
 			} catch (final BehaviorInstantiationException e) {
-				throw new CantBeAliveException("ドロップ行動の初期化に失敗しました", e);
+				throw new CantBeAliveException("Cannot initialize Thrown behaviour", e);
 			}
 		}
 
@@ -124,7 +124,7 @@ public class UserBehavior implements Behavior {
 						|| (getEnvironment().getScreen().getRight() <= getMascot().getBounds().getX())
 						|| (getEnvironment().getScreen().getBottom() <= getMascot().getBounds().getY())) {
 
-					log.log(Level.INFO, "画面の外に出た({0},{1})", new Object[] { getMascot(), this });
+					log.log(Level.INFO, "Got out of screen({0},{1})", new Object[] { getMascot(), this });
 
 					getMascot().setAnchor(
 							new Point((int) (Math.random() * (getEnvironment().getScreen().getRight() - getEnvironment()
@@ -134,29 +134,29 @@ public class UserBehavior implements Behavior {
 					try {
 						getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Fall));
 					} catch (final BehaviorInstantiationException e) {
-						throw new CantBeAliveException("落ちる行動の初期化に失敗しました", e);
+						throw new CantBeAliveException("Cannot initialize Fall behaviour", e);
 					}
 				}
 
 			} else {
-				log.log(Level.INFO, "行動完了({0},{1})", new Object[] { getMascot(), this });
+				log.log(Level.INFO, "Action is over({0},{1})", new Object[] { getMascot(), this });
 
 				try {
 					getMascot().setBehavior(this.getConfiguration().buildBehavior(name, getMascot()));
 				} catch (final BehaviorInstantiationException e) {
-					throw new CantBeAliveException("次の行動の初期化に失敗しました", e);
+					throw new CantBeAliveException("Failed to initialize the next action", e);
 				}
 			}
 		} catch (final LostGroundException e) {
-			log.log(Level.INFO, "地面から離れた({0},{1})", new Object[] { getMascot(), this });
+			log.log(Level.INFO, "Off the ground({0},{1})", new Object[] { getMascot(), this });
 
 			try {
 				getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Fall));
 			} catch (final BehaviorInstantiationException ex) {
-				throw new CantBeAliveException("落ちる行動の初期化に失敗しました", ex);
+				throw new CantBeAliveException("Cannot initialize Fall behaviour", ex);
 			}
 		} catch (final VariableException e) {
-			throw new CantBeAliveException("変数の評価でエラーが発生しました", e);
+			throw new CantBeAliveException("An error occurred during variable evaluation", e);
 		}
 
 	}

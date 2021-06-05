@@ -33,7 +33,7 @@ public class Pose {
 	
 	@Override
 	public String toString() {
-		return "姿勢("+getImage()+","+getDx()+","+getDy()+","+getDuration()+")";
+		return "Pose("+getImage()+","+getDx()+","+getDy()+","+getDuration()+")";
 	}
 
 	public void next(final Mascot mascot) {

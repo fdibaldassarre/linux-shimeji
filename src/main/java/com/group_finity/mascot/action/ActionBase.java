@@ -54,7 +54,7 @@ public abstract class ActionBase implements Action {
 		this.setMascot(mascot);
 		this.setTime(0);
 
-		log.log(Level.INFO, "動作開始({0},{1})", new Object[] { getMascot(), this });
+		log.log(Level.INFO, "Action start({0},{1})", new Object[] { getMascot(), this });
 
 		// スクリプトで使用できるようにmascotとactionを変数マップに追加しておく
 		this.getVariables().put(VariableIdentifier.mascot, new Constant(mascot));
@@ -136,7 +136,7 @@ public abstract class ActionBase implements Action {
 			}
 		}
 
-		log.log(Level.SEVERE, "有効なアニメーションが見つけられませんでした({0},{1})", new Object[] { getMascot(), this });
+		log.log(Level.SEVERE, "No valid animation was found({0},{1})", new Object[] { getMascot(), this });
 		return null;
 	}
 
@@ -150,17 +150,17 @@ public abstract class ActionBase implements Action {
 		}
 	}
 
-	protected <T> T eval(final VariableIdentifier ide, final Class<T> type, final T defaultValue) throws VariableException {
-
-		synchronized (getVariables()) {
-			final Variable variable = getVariables().get(ide);
-			if (variable != null) {
-				return type.cast(variable.get(getVariables()));
-			}
-		}
-
-		return defaultValue;
-	}
+//	protected <T> T eval(final VariableIdentifier ide, final Class<T> type, final T defaultValue) throws VariableException {
+//
+//		synchronized (getVariables()) {
+//			final Variable variable = getVariables().get(ide);
+//			if (variable != null) {
+//				return type.cast(variable.get(getVariables()));
+//			}
+//		}
+//
+//		return defaultValue;
+//	}
 	
 	protected <T> T eval(final XmlIdentifiers ide, final Class<T> type, final T defaultValue) throws VariableException {
 

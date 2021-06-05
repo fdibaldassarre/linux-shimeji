@@ -99,7 +99,7 @@ public class Mascot {
 	public Mascot() {
 		this.id = lastId.incrementAndGet();
 
-		log.log(Level.INFO, "マスコット生成({0})", this);
+		log.log(Level.INFO, "Creating({0})", this);
 
 		// 常に最善面に表示
 		getWindow().asJWindow().setAlwaysOnTop(true);
@@ -112,7 +112,7 @@ public class Mascot {
 
 	@Override
 	public String toString() {
-		return "マスコット" + this.id;
+		return "Mascot" + this.id;
 	}
 	void tick() {
 	// Update the current IE window the mascot is attached to based on floor/wall checks
@@ -123,7 +123,7 @@ public class Mascot {
 				try {
 					getBehavior().next();
 				} catch (final CantBeAliveException e) {
-					log.log(Level.SEVERE, "生き続けることが出来ない状況", e);
+					log.log(Level.SEVERE, "Cannot stay alive", e);
 					dispose();
 				}
 
@@ -166,7 +166,7 @@ public class Mascot {
 	}
 
 	public void dispose() {
-		log.log(Level.INFO, "マスコット破棄({0})", this);
+		log.log(Level.INFO, "Disposing({0})", this);
 
 		getWindow().asJWindow().dispose();
 		if (getManager() != null) {
