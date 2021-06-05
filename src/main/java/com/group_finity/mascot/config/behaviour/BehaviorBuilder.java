@@ -37,7 +37,7 @@ public class BehaviorBuilder {
 
 	private final boolean nextAdditive;
 
-	private final List<BehaviorBuilder> nextBehaviorBuilders = new ArrayList<BehaviorBuilder>();
+	private final List<BehaviorBuilder> nextBehaviorBuilders = new ArrayList<>();
 
 	private final Map<XmlIdentifiers, String> params = new LinkedHashMap<>();
 
