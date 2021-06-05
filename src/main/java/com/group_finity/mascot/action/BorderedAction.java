@@ -55,7 +55,7 @@ public abstract class BorderedAction extends ActionBase {
 		}
 	}
 	
-	private BorderType getBorderType() throws VariableException {
+	protected BorderType getBorderType() throws VariableException {
 		String borderRaw = eval(XmlIdentifiers.BorderType, String.class, DEFAULT_BORDERTYPE);
 		
 		return BorderType.parseString(borderRaw, getVariables().getLanguage());
