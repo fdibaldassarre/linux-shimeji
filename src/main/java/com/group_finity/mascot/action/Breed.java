@@ -87,10 +87,5 @@ public class Breed extends Animate {
 	private String getBornBehavior() throws VariableException {
 		return eval(XmlIdentifiers.BornBehavior, String.class, DEFAULT_BORNBEHAVIOR);
 	}
-	
-	@Override
-	protected BorderType getBorderType() {
-		return BorderType.Floor;
-	}
 
 }
