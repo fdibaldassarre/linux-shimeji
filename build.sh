@@ -3,13 +3,14 @@ set -e
 
 # builds the current version of linux-shimeji
 BASE_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd "$BASE_FOLDER"
+mvn clean install
+
+
+# Build the deb package
 BASE="$BASE_FOLDER/target/deb_build"
 
-## DELETE THE OLD BUILD FOLDER
-
-if [ -e "$BASE" ]; then
-  rm -Rf "$BASE"
-fi
+## Create folders
 
 mkdir -p "$BASE/usr/share/linux-shimeji"
 mkdir -p "$BASE/usr/share/linux-shimeji/icons"
@@ -21,7 +22,7 @@ mkdir -p "$BASE/usr/share/applications"
 
 mkdir -p "$BASE/DEBIAN"
 
-## COPY THE NEW FILES INTO THE BUILD FOLDER
+## Copy the files
 
 # 1 - Icons
 cp "src/main/resources/shime/img/icon.png" "$BASE/usr/share/linux-shimeji/icons/icon.png"
