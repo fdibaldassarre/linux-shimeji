@@ -23,6 +23,9 @@ public class ConfigurationFactory {
 	
 	private static final String DEFAULT_SHIMEJI = "shime";
 	
+	private static final String [] ACTION_XML_NAME = {"actions.xml", "Actions.xml"};
+	private static final String [] BEHAVIOUR_XML_NAME = {"behaviors.xml", "Behaviors.xml", "Behavior.xml", "behavior.xml"};
+	
 	private final Path configurationFolder;
 	private final Path logFolder;
 	private String shimejiName;
@@ -139,7 +142,13 @@ public class ConfigurationFactory {
 		if(shimejiFolder == null) {
 			return ConfigurationFactory.class.getResourceAsStream("/shime/conf/Behavior.xml");
 		} else {
-			Path behaviourFile = shimejiFolder.resolve("conf/behaviors.xml");
+			Path behaviourFile = null;
+			for(String name: BEHAVIOUR_XML_NAME) {
+				behaviourFile = shimejiFolder.resolve(String.format("conf/%s", name));
+				if(Files.exists(behaviourFile)) {
+					break;
+				}
+			}
 			try {
 				return new FileInputStream(behaviourFile.toAbsolutePath().toString());
 			} catch (FileNotFoundException e) {
@@ -152,9 +161,15 @@ public class ConfigurationFactory {
 		if(shimejiFolder == null) {
 			return ConfigurationFactory.class.getResourceAsStream("/shime/conf/Actions.xml");
 		} else {
-			Path behaviourFile = shimejiFolder.resolve("conf/actions.xml");
+			Path actionFile = null;
+			for(String name: ACTION_XML_NAME) {
+				actionFile = shimejiFolder.resolve(String.format("conf/%s", name));
+				if(Files.exists(actionFile)) {
+					break;
+				}
+			}
 			try {
-				return new FileInputStream(behaviourFile.toAbsolutePath().toString());
+				return new FileInputStream(actionFile.toAbsolutePath().toString());
 			} catch (FileNotFoundException e) {
 				throw new RuntimeException(e);
 			}
