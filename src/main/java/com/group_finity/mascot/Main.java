@@ -162,6 +162,7 @@ public class Main {
 
 			// トレイアイコンを表示
 			SystemTray.getSystemTray().add(icon);
+			getManager().setExitOnLastRemoved(false);
 
 		} catch (final IOException e) {
 			log.log(Level.SEVERE, "トレイアイコンの作成に失敗", e);

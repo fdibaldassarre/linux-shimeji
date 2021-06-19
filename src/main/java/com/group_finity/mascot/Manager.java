@@ -51,7 +51,7 @@ public class Manager {
 	 * 最後のマスコットを削除した時にプログラムを終了すべきかどうか.
 	 * トレイアイコンの作成に失敗した時などは、マスコットがいなくなったらプログラムを終了しないと、プロセスがずっと残ってしまう.
 	 */
-	private boolean exitOnLastRemoved;
+	private boolean exitOnLastRemoved = true;
 
 	/**
 	 * {@link #tick()}をループするスレッド.
