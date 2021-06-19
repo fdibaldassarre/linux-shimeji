@@ -56,7 +56,7 @@ public class MascotEventHandler implements MouseListener {
 
 	public void mouseReleased(final MouseEvent event) {
 
-		if (event.isPopupTrigger()) {
+		if (SwingUtilities.isRightMouseButton(event)) {
 			SwingUtilities.invokeLater(new Runnable(){
 				@Override
 				public void run() {
@@ -95,7 +95,7 @@ public class MascotEventHandler implements MouseListener {
 			}
 		});
 
-		final JMenuItem disposeMenu = new JMenuItem("Quit");
+		final JMenuItem disposeMenu = new JMenuItem("Dismiss");
 		disposeMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -105,7 +105,7 @@ public class MascotEventHandler implements MouseListener {
 
 		popup.add(disposeMenu);
 
-		if (MascotEventHandler.isShowSystemTrayMenu()) {
+		if (!MascotEventHandler.isShowSystemTrayMenu()) {
 
 			popup.add(new JSeparator());
 
