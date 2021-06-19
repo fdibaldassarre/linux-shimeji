@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Shimeji
+Comment=Have Shimeji going around your desktop
+Categories=Utility;
+Exec=/usr/bin/linux-shimeji
+Icon=/usr/share/linux-shimeji/icons/icon.png
+Terminal=false
+Type=Application
+StartupNotify=true
