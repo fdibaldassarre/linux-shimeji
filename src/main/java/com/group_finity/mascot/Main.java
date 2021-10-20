@@ -149,7 +149,7 @@ public class Main {
 
 		try {
 			// トレイアイコンを作成
-			final TrayIcon icon = new TrayIcon(ImageIO.read(Main.class.getResource("/icon.png")), "しめじ", trayPopup);
+			final TrayIcon icon = new TrayIcon(ImageIO.read(Main.class.getResource("/shime/img/icon.png")), "しめじ", trayPopup);
 			icon.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(final MouseEvent e) {
