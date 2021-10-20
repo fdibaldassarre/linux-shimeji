@@ -5,8 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+
+import com.group_finity.mascot.config.AnimationBuilder;
 
 
 
@@ -14,6 +18,8 @@ import javax.imageio.ImageIO;
  *　画像ペアを読み込む.
  */
 public class ImagePairLoader {
+	
+	private static final Logger log = Logger.getLogger(ImagePairLoader.class.getName());
 	
 	private final Path imgPath;
 
@@ -33,7 +39,8 @@ public class ImagePairLoader {
 	public ImagePair load(final String name, final Point center) throws IOException {
 		final URL inputImg;
 		if(imgPath == null) {
-			inputImg = ImagePairLoader.class.getResource("/shime/img/" + name);
+			log.log(Level.INFO, "Loading " + name);
+			inputImg = ImagePairLoader.class.getResource("/shime/img" + name);
 		} else {
 			inputImg = imgPath.resolve(name.substring(1, name.length())).toUri().toURL();
 		}
