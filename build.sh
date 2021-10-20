@@ -138,6 +138,10 @@ echo " This port supports both English and Japanese Shimeji." >> control
 # BUILD
 cd "$BASE_FOLDER/target"
 
-fakeroot dpkg-deb --build deb_build/ linux-shimeji_"$VERSION"_all.deb
+packageName=linux-shimeji_"$VERSION"_all.deb
+
+fakeroot dpkg-deb --build deb_build/ "$packageName"
+
+echo "Package created: $BASE_FOLDER/target/$packageName"
 
 exit 0

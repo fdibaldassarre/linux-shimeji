@@ -39,6 +39,15 @@ language = JPN
 ```
 
 
+Building a package
+==============
+Run `./build.sh` to build a Debian/Ubuntu package.
+
+The deb will install a Shimeji application under 'Accessory'.
+
+To run from terminal use `shimeji-linux`.
+
+
 License
 ==========
 This project inherits the ZLIB/LIBPNG license of the original [program](http://www.group-finity.com/Shimeji). 
