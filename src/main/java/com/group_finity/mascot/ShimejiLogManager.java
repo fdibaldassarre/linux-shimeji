@@ -16,7 +16,7 @@ public class ShimejiLogManager {
 	public void init() {
 		try {
 			if(!Files.isDirectory(logFolder)) {
-				Files.createDirectory(logFolder);
+				Files.createDirectories(logFolder);
 			}
 			LogManager.getLogManager().readConfiguration(Main.class.getResourceAsStream("/logging.properties"));
 		

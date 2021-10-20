@@ -87,6 +87,7 @@ public class ConfigurationFactory {
 		try {
 			File file = configFile.toFile();
 			if(!file.exists()) {
+				Files.createDirectories(file.getParentFile().toPath());
 				file.createNewFile();
 			} else {
 				// Never overwrite existing files
