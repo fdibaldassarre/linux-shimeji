@@ -29,7 +29,7 @@ cp "src/main/resources/shime/img/icon.png" "$BASE/usr/share/linux-shimeji/icons/
 
 # 2 - Executables
 cp "target/linux-shimeji-0.0.1-SNAPSHOT-jar-with-dependencies.jar" "$BASE/usr/share/linux-shimeji/shimeji.jar"
-cp "launch.sh" "$BASE/usr/bin/linux-shimeji"
+cp "DEBIAN/launch.sh" "$BASE/usr/bin/linux-shimeji"
 
 # 3 - Debian files (changelog/copyright/manual)
 cp "DEBIAN/changelog" "$BASE/usr/share/doc/linux-shimeji/changelog.Debian"
