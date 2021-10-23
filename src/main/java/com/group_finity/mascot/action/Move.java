@@ -9,6 +9,8 @@ import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.exception.LostGroundException;
 import com.group_finity.mascot.exception.VariableException;
+import com.group_finity.mascot.script.Constant;
+import com.group_finity.mascot.script.VariableIdentifier;
 import com.group_finity.mascot.script.VariableMap;
 
 /**
@@ -32,6 +34,9 @@ public class Move extends BorderedAction {
 
 		final int targetX = getTargetX();
 		final int targetY = getTargetY();
+		
+		variables.put(VariableIdentifier.TargetX, new Constant(targetX));
+		variables.put(VariableIdentifier.TargetY, new Constant(targetY));
 
 		boolean noMoveX = false;
 		boolean noMoveY = false;

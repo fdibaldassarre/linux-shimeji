@@ -4,7 +4,10 @@ public enum VariableIdentifier {
 	mascot,
 	action,
 	footX("FootX"),
-	maxCount;
+	maxCount,
+	TargetX("目的地X"),
+	TargetY("目的地Y")
+	;
 	
 	private final String[] additionalIdentifiers;
 

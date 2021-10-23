@@ -33,7 +33,7 @@ public abstract class ActionBase implements Action {
 
 	private List<Animation> animations;
 
-	private VariableMap variables;
+	protected final VariableMap variables;
 
 	public ActionBase(final List<Animation> animations, final VariableMap context) {
 		this.animations = animations;
