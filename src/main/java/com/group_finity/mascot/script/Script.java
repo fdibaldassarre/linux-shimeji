@@ -5,6 +5,7 @@ import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+
 import com.group_finity.mascot.exception.VariableException;
 
 public class Script extends Variable {
@@ -59,7 +60,7 @@ public class Script extends Variable {
 			
 			setValue(getCompiled().eval(variables.getBindings()));
 		} catch (final ScriptException e) {
-			throw new VariableException("Error evaluating script "+this.source, e);
+			throw new VariableException(String.format("Error evaluating script %s with variables: %s", this.source, variables), e);
 		}
 
 		return getValue();

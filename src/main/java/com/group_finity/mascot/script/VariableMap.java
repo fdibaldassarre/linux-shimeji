@@ -117,6 +117,7 @@ public class VariableMap {
 	
 	public void put(XmlIdentifiers ide, Variable value) {
 		bindings.put(ide.toString(), value);
+		bindings.put(ide.getName(lang), value);
 	}
 	
 //	public Variable get(VariableIdentifier ide) {
@@ -143,5 +144,23 @@ public class VariableMap {
 		// Need a delayed evaluation map to avoid infinite recursion since the code sucks badly
 		return new DelayedEvaluationBindings(this, bindings);
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{ ");
+		for(String binding: bindings.keySet()) {
+			builder.append("[ ");
+			builder.append(binding);
+			builder.append("=");
+			builder.append(bindings.get(binding));
+			builder.append(" ]");
+		}
+		builder.append(" }");
+		
+		return builder.toString();
+	}
+	
+	
 
 }
