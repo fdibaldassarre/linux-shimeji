@@ -17,9 +17,9 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 
-import com.group_finity.mascot.config.BehaviourName;
 import com.group_finity.mascot.config.Configuration;
 import com.group_finity.mascot.config.ConfigurationFactory;
+import com.group_finity.mascot.config.KnownBehaviour;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 
@@ -28,7 +28,7 @@ import com.group_finity.mascot.exception.CantBeAliveException;
  */
 public class Main {
 
-	static final BehaviourName BEHAVIOR_GATHER = BehaviourName.ChaseMouse;
+	static final KnownBehaviour BEHAVIOR_GATHER = KnownBehaviour.ChaseMouse;
 
 	private static Main instance = new Main();
 

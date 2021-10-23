@@ -57,7 +57,7 @@ public class BehaviorBuilder {
 	// Conversion to multiwindow environment checks
 	// Also set IE throw frequency to 0
 		if (behaviourName.isIeThrow()) frequency = 0;
-		if (behaviourName == BehaviourName.Fall) frequency = 1;
+		if (behaviourName.isFall()) frequency = 1;
 		if (!behaviourName.isJump()) {
 			if (conditions != null) {
 				for (int i=0;i<conditions.size();i++) {
@@ -77,8 +77,11 @@ public class BehaviorBuilder {
 		this.getParams().remove(XmlIdentifiers.Condition);
 
 		boolean nextAdditive = true;
+		
+		List<Entry> nextBehaviourList = behaviorNode.selectChildren(XmlIdentifiers.NextBehavior);
+		nextBehaviourList.addAll(behaviorNode.selectChildren(XmlIdentifiers.NextBehaviorList));
 
-		for (final Entry nextList : behaviorNode.selectChildren(XmlIdentifiers.NextBehavior)) {
+		for (final Entry nextList : nextBehaviourList) {
 
 			log.log(Level.INFO, "Next action list...");
 
@@ -126,7 +129,7 @@ public class BehaviorBuilder {
 	public Behavior buildBehavior() throws BehaviorInstantiationException {
 
 		try {
-			return new UserBehavior(getName(),
+			return new UserBehavior(behaviourName,
 						getConfiguration().buildAction(getActionName(),
 								getParams()), getConfiguration() );
 		} catch (final ActionInstantiationException e) {
@@ -148,8 +151,8 @@ public class BehaviorBuilder {
 		return true;
 	}
 
-	public BehaviourName getName() {
-		return behaviourName;
+	public String getName() {
+		return behaviourName.getName();
 	}
 
 	public int getFrequency() {

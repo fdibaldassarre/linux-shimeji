@@ -2,7 +2,6 @@ package com.group_finity.mascot.config;
 
 import java.awt.Point;
 import java.io.IOException;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -31,15 +30,18 @@ public class LocalizedConfiguration implements Configuration {
 
 	private final Map<String, ActionBuilder> actionBuilders = new LinkedHashMap<>();
 
-	private final Map<BehaviourName, BehaviorBuilder> behaviorBuilders = new LinkedHashMap<>();
+	private final Map<String, BehaviorBuilder> behaviorBuilders = new LinkedHashMap<>();
 
 	private final Path shimejiImgFolder;
 	
 	private final XmlLanguages language;
+
+	private final int maxMascotCount;
 	
-	protected LocalizedConfiguration(Path shimejiImgFolder, XmlLanguages language) {
+	protected LocalizedConfiguration(Path shimejiImgFolder, XmlLanguages language, int maxMascotCount) {
 		this.shimejiImgFolder = shimejiImgFolder;
 		this.language = language;
+		this.maxMascotCount = maxMascotCount;
 	}
 
 	@Override
@@ -110,9 +112,10 @@ public class LocalizedConfiguration implements Configuration {
 	}
 	
 	@Override
-	public Behavior buildBehavior(BehaviourName previousName, Mascot mascot) throws BehaviorInstantiationException {
+	public Behavior buildBehavior(BehaviourName previousBehaviour, Mascot mascot) throws BehaviorInstantiationException {
 		final VariableMap context = new VariableMap(language);
 		context.put(VariableIdentifier.mascot, new Constant(mascot));
+		context.put(VariableIdentifier.maxCount, new Constant(maxMascotCount));
 
 		// TODO ここ以外で必要な場合は？根本的につくりを見直すべき
 //		for( Map.Entry<String, String> e : constants.entrySet() ) {
@@ -132,8 +135,8 @@ public class LocalizedConfiguration implements Configuration {
 			}
 		}
 
-		if (previousName != null) {
-			final BehaviorBuilder previousBehaviorFactory = behaviorBuilders.get(previousName);
+		if (previousBehaviour != null) {
+			final BehaviorBuilder previousBehaviorFactory = behaviorBuilders.get(previousBehaviour.getName());
 			if (!previousBehaviorFactory.isNextAdditive()) {
 				totalFrequency = 0;
 				candidates.clear();
@@ -156,7 +159,7 @@ public class LocalizedConfiguration implements Configuration {
 							- mascot.getEnvironment()
 					.getScreen().getLeft()))
 					+ mascot.getEnvironment().getScreen().getLeft(), mascot.getEnvironment().getScreen().getTop() - 256));
-			return buildBehavior(BehaviourName.Fall);
+			return buildBehavior(KnownBehaviour.Fall);
 		}
 
 		double random = Math.random() * totalFrequency;
@@ -173,14 +176,13 @@ public class LocalizedConfiguration implements Configuration {
 
 	@Override
 	public Behavior buildBehavior(final String name) throws BehaviorInstantiationException {
-		System.out.println("Dep" + name);
-		BehaviourName behaviourName = BehaviourName.parseString(name, language);
-		return buildBehavior(behaviourName);
+		return behaviorBuilders.get(name).buildBehavior();
 	}
 	
 	@Override
-	public Behavior buildBehavior(BehaviourName name) throws BehaviorInstantiationException {
-		return behaviorBuilders.get(name).buildBehavior();
+	public Behavior buildBehavior(KnownBehaviour behaviour) throws BehaviorInstantiationException {
+		String localizedName = behaviour.getName(language);
+		return behaviorBuilders.get(localizedName).buildBehavior();
 	}
 
 	public Map<String, ActionBuilder> getActionBuilders() {

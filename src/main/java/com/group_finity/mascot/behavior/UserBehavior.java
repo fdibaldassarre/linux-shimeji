@@ -11,6 +11,7 @@ import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.config.BehaviourName;
 import com.group_finity.mascot.config.Configuration;
+import com.group_finity.mascot.config.KnownBehaviour;
 import com.group_finity.mascot.environment.MascotEnvironment;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
@@ -82,7 +83,7 @@ public class UserBehavior implements Behavior {
 		if (SwingUtilities.isLeftMouseButton(event)) {
 			// ドラッグ開始のお知らせ
 			try {
-				getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Dragged));
+				getMascot().setBehavior(this.getConfiguration().buildBehavior(KnownBehaviour.Dragged));
 			} catch (final BehaviorInstantiationException e) {
 				throw new CantBeAliveException("Cannot initialize Dragged behaviour", e);
 			}
@@ -100,7 +101,7 @@ public class UserBehavior implements Behavior {
 		if (SwingUtilities.isLeftMouseButton(event)) {
 			// ドラッグ終了のお知らせ
 			try {
-				getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Thrown));
+				getMascot().setBehavior(this.getConfiguration().buildBehavior(KnownBehaviour.Thrown));
 			} catch (final BehaviorInstantiationException e) {
 				throw new CantBeAliveException("Cannot initialize Thrown behaviour", e);
 			}
@@ -132,7 +133,7 @@ public class UserBehavior implements Behavior {
 									+ getEnvironment().getScreen().getLeft(), getEnvironment().getScreen().getTop() - 256));
 
 					try {
-						getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Fall));
+						getMascot().setBehavior(this.getConfiguration().buildBehavior(KnownBehaviour.Fall));
 					} catch (final BehaviorInstantiationException e) {
 						throw new CantBeAliveException("Cannot initialize Fall behaviour", e);
 					}
@@ -151,7 +152,7 @@ public class UserBehavior implements Behavior {
 			log.log(Level.INFO, "Off the ground({0},{1})", new Object[] { getMascot(), this });
 
 			try {
-				getMascot().setBehavior(this.getConfiguration().buildBehavior(BehaviourName.Fall));
+				getMascot().setBehavior(this.getConfiguration().buildBehavior(KnownBehaviour.Fall));
 			} catch (final BehaviorInstantiationException ex) {
 				throw new CantBeAliveException("Cannot initialize Fall behaviour", ex);
 			}

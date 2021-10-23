@@ -8,8 +8,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.group_finity.mascot.config.BehaviourName;
 import com.group_finity.mascot.config.Configuration;
+import com.group_finity.mascot.config.KnownBehaviour;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 
@@ -215,7 +215,7 @@ public class Manager {
 	 * @param configuration
 	 * @param name
 	 */
-	public void setBehaviorAll(final Configuration configuration, final BehaviourName behaviour) {
+	public void setBehaviorAll(final Configuration configuration, final KnownBehaviour behaviour) {
 		synchronized (this.getMascots()) {
 			for (final Mascot mascot : this.getMascots()) {
 				try {

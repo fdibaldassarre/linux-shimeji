@@ -19,10 +19,9 @@ public interface Configuration {
 	
 	void validate() throws ConfigurationException;
 	
-	@Deprecated
 	Behavior buildBehavior(String name) throws BehaviorInstantiationException;
 	
-	Behavior buildBehavior(BehaviourName name) throws BehaviorInstantiationException;
+	Behavior buildBehavior(KnownBehaviour name) throws BehaviorInstantiationException;
 		
 	Behavior buildBehavior(BehaviourName previousName, Mascot mascot) throws BehaviorInstantiationException;
 	

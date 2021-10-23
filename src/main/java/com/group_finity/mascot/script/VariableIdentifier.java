@@ -3,7 +3,8 @@ package com.group_finity.mascot.script;
 public enum VariableIdentifier {
 	mascot,
 	action,
-	footX("FootX");
+	footX("FootX"),
+	maxCount;
 	
 	private final String[] additionalIdentifiers;
 

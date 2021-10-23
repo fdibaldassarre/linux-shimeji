@@ -104,7 +104,7 @@ public class ConfigurationFactory {
 	}
 
 	public Configuration load() throws ConfigurationException {
-		Configuration configuration = new LocalizedConfiguration(shimejiImgFolder, shimejiLang);
+		Configuration configuration = new LocalizedConfiguration(shimejiImgFolder, shimejiLang, 10);
 		
 		loadBehaviour(configuration);
 		loadActions(configuration);
