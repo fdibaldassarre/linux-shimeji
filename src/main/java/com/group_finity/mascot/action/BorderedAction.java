@@ -2,16 +2,15 @@ package com.group_finity.mascot.action;
 
 import java.awt.Point;
 import java.util.List;
-import java.util.logging.Logger;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.environment.Border;
+import com.group_finity.mascot.environment.NotOnVisibleBorder;
 import com.group_finity.mascot.exception.LostGroundException;
 import com.group_finity.mascot.exception.VariableException;
 import com.group_finity.mascot.script.VariableMap;
-import com.group_finity.mascot.environment.NotOnVisibleBorder;
 
 
 /**

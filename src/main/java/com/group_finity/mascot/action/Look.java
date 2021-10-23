@@ -1,7 +1,5 @@
 package com.group_finity.mascot.action;
 
-import java.util.logging.Logger;
-
 import com.group_finity.mascot.config.XmlIdentifiers;
 import com.group_finity.mascot.exception.VariableException;
 import com.group_finity.mascot.script.VariableMap;
