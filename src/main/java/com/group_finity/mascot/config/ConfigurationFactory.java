@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -16,8 +17,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.group_finity.mascot.exception.ConfigurationException;
-
-import java.nio.file.Files;
 
 public class ConfigurationFactory {
 	
@@ -32,6 +31,7 @@ public class ConfigurationFactory {
 	private XmlLanguages shimejiLang;
 	private Path shimejiFolder;
 	private Path shimejiImgFolder;
+	private int maxMascotCount;
 	
 	public ConfigurationFactory() {
 		String homeFolder = System.getProperty("user.home");
@@ -66,9 +66,14 @@ public class ConfigurationFactory {
 			loadDefault();
 			return;
 		}
+		// Language
 		String shimejiLangStr =  wini.get("shimeji", "language", String.class);
 		shimejiLang = XmlLanguages.valueOf(shimejiLangStr);
 		shimejiLang = shimejiLang == null ? XmlLanguages.JPN : shimejiLang;
+		// Other options
+		Integer maxCountOption = wini.get("shimeji", "maxCount", Integer.class);
+		maxMascotCount = maxCountOption != null ? maxCountOption: 999;
+		// Folder
 		shimejiFolder = configurationFolder.resolve(shimejiName);
 		if(!Files.exists(shimejiFolder)) {
 			throw new RuntimeException("Missing shimeji folder");
@@ -104,7 +109,7 @@ public class ConfigurationFactory {
 	}
 
 	public Configuration load() throws ConfigurationException {
-		Configuration configuration = new LocalizedConfiguration(shimejiImgFolder, shimejiLang, 10);
+		Configuration configuration = new LocalizedConfiguration(shimejiImgFolder, shimejiLang, maxMascotCount );
 		
 		loadBehaviour(configuration);
 		loadActions(configuration);
