@@ -78,7 +78,13 @@ public class ConfigurationFactory {
 		if(!Files.exists(shimejiFolder)) {
 			throw new RuntimeException("Missing shimeji folder");
 		}
-		shimejiImgFolder = shimejiFolder.resolve("img");
+		shimejiImgFolder = shimejiFolder.resolve("img/Shimeji");
+		if(!Files.exists(shimejiImgFolder)) {
+			shimejiImgFolder = shimejiFolder.resolve("img/shimeji");
+			if(!Files.exists(shimejiImgFolder)) {
+				shimejiImgFolder = shimejiFolder.resolve("img");
+			}
+		}
 	}
 	
 	private void loadDefault() {
