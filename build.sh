@@ -128,7 +128,7 @@ echo "Version: $VERSION" >> control
 echo "Section: web" >> control
 echo "Priority: optional" >> control
 echo "Architecture: all" >> control
-echo "Depends: default-jre, jarwrapper" >> control
+echo "Depends: openjdk-11-jre, jarwrapper" >> control
 echo "Installed-Size: 3584" >> control
 echo "Maintainer: Francesco Di Baldassarre <f.dibaldassarre@gmail.com>" >> control
 echo "Provides: linux-shimeji" >> control

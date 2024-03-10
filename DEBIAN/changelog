@@ -1,3 +1,9 @@
+linux-shimeji (0.0.1-3) experimental; urgency=low 
+
+  * Launch using openjdk-11.
+
+ -- Francesco Di Baldassarre <f.dibaldassarre@gmail.com>  Sun, 10 Mar 2024 12:31:00 +0400 
+
 linux-shimeji (0.0.1-2) experimental; urgency=low 
 
   * Improved parsing.
