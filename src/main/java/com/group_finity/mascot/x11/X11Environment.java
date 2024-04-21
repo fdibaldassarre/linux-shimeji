@@ -9,6 +9,8 @@ import com.group_finity.mascot.environment.WindowContainer;
 import com.group_finity.mascot.environment.Environment;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -71,8 +73,13 @@ class X11Environment extends Environment {
 		badTypeList.add(Integer.decode(display.getAtom("_NET_WM_WINDOW_TYPE_SPLASH").toString()));
 		badTypeList.add(Integer.decode(display.getAtom("_NET_WM_WINDOW_TYPE_DIALOG").toString()));
 		badTypeList.add(Integer.decode(display.getAtom("_NET_WM_WINDOW_TYPE_DESKTOP").toString()));
+
+		// Load overrides
+		String homeFolder = System.getProperty("user.home");
+		Path configurationFolder = Paths.get(homeFolder, ".config", "shimeji");
 		try {
-			FileInputStream fstream = new FileInputStream("window.conf");
+			Path windowConfigPath = configurationFolder.resolve("window.conf");
+			FileInputStream fstream = new FileInputStream(windowConfigPath.toFile());
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
@@ -80,11 +87,10 @@ class X11Environment extends Environment {
 			while ((strLine = br.readLine()) != null) {
 				z++;
 				switch (z) {
-					case 1: break;
-					case 2: this.xoffset = Integer.parseInt(strLine.trim()); break;
-					case 3: this.yoffset = Integer.parseInt(strLine.trim()); break;
-					case 4: this.wmod = Integer.parseInt(strLine.trim()); break;
-					case 5: this.hmod = Integer.parseInt(strLine.trim()); break;
+					case 1: this.xoffset = Integer.parseInt(strLine.trim()); break;
+					case 2: this.yoffset = Integer.parseInt(strLine.trim()); break;
+					case 3: this.wmod = Integer.parseInt(strLine.trim()); break;
+					case 4: this.hmod = Integer.parseInt(strLine.trim()); break;
 					default : break;
 				}
 			}

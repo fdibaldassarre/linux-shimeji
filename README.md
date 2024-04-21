@@ -30,6 +30,27 @@ name = shimeji
 language = JPN
 ```
 
+### Window configuration
+
+It is possible to adjust the window position using the file `~/config/window.conf`.
+The file should contain four values, one for each line:
+- X-axis offset
+- Y-axis offset
+- window width delta
+- window height delta
+
+For instance the file
+
+```
+10
+-20
+100
+200
+```
+
+Will cause the windows top-right corner to be moved 10px to the right and 20px to the top.
+The windows width will be increased by 100px and the height by 200px.
+
 # Development
 
 ## Requirements
