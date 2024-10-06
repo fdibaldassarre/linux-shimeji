@@ -3,15 +3,30 @@
 
 This is a fork of [Shimeji for Linux by asdfman](https://github.com/asdfman/linux-shimeji).
 
-This is a work in progress.
+Not in active development.
 
-# Usage
+# Installation
 
 Download and install the latest .deb from the [Releases page](https://github.com/fdibaldassarre/linux-shimeji/releases).
 
 To run open the Shimeji application or execute `linux-shimeji` from the terminal.
 
-## Installing new shimeji
+## Alternative install with Distrobox
+
+To install the application using [Distrobox](https://distrobox.it/).
+```commandline
+# Create container
+distrobox create --name shimeji-test -i ubuntu:20.04 --additional-packages openjdk-11-jre
+# Enter the container
+distrobox enter shimeji-test
+# Inside the container install the package
+cd /path/to/shimeji/deb
+sudo dpkg -i linux-shimeji_*_all_nodep.deb
+```
+
+You can the run the Shimeji application with `distrobox enter shimeji-test -- linux-shimeji`.
+
+# Installing new shimeji
 To install a new shimeji copy the shimeji folder in`~/.config/shimeji`.
 
 Then edit the file `~/.config/shimeji/config.ini` with the name of the folder
